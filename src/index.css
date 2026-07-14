@@ -218,9 +218,8 @@ main {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(105deg, rgba(0, 56, 46, 0.92) 0%, rgba(0, 80, 64, 0.72) 48%, rgba(64, 32, 144, 0.35) 100%),
-    radial-gradient(circle at 70% 40%, rgba(16, 160, 48, 0.35), transparent 45%),
-    url("/brand/wc-flyer.png") center / cover no-repeat;
+    linear-gradient(105deg, rgba(0, 56, 46, 0.88) 0%, rgba(0, 80, 64, 0.55) 45%, rgba(0, 56, 46, 0.35) 100%),
+    url("/brand/hero-lawn.png") center / cover no-repeat;
   transform: scale(1.02);
   animation: heroDrift 18s ease-in-out infinite alternate;
 }
