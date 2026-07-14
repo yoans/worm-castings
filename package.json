@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && cp dist/index.html dist/404.html && npx gh-pages -d dist -b gh-pages -m \"Deploy site to GitHub Pages\""
   },
   "dependencies": {
     "react": "^19.1.0",
