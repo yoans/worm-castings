@@ -1,28 +1,8 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { BuyInquire } from '@/components/BuyInquire'
+import { asset } from '@/lib/assets'
 import { COPY, RATES, bagsNeeded, estimatePrice, lbsNeeded } from '@/lib/castings'
-
-const TESTIMONIALS = [
-  {
-    quote:
-      'Central Iowa watering bans made us rethink the chemical-fertilizer reflex. We’re documenting a real yard on castings — healthier turf without stacking soluble nitrates.',
-    name: 'Case-study homeowner',
-    detail: 'Central Iowa · ~15,000 sq ft lawn · fall + spring program',
-  },
-  {
-    quote:
-      'I want a lawn that holds water in the soil, not one that sends leftovers toward the river every time it rains. Castings are the first product that made that trade-off make sense.',
-    name: 'Prospective lawn customer',
-    detail: 'Voice from market conversations — replace with named reviews as they come in',
-  },
-  {
-    quote:
-      'Parents stop for the kids worm game, then ask how many bags their yard needs. The calculator turns curiosity into a concrete call to the Ranch.',
-    name: 'Go-to-market partner',
-    detail: 'Education → inquiry path for Farmer’s Market season',
-  },
-] as const
 
 export function LawnPage() {
   const [sqFt, setSqFt] = useState(15000)
@@ -92,8 +72,8 @@ export function LawnPage() {
             <small>{result.note}</small>
           </div>
           <p style={{ margin: 0, position: 'relative', zIndex: 1 }}>
-            Each season: <strong>{perSeasonLbs.toLocaleString()} lbs</strong>. Application is yours — a Scott’s
-            rotary spreader works well. No online checkout; call or visit to purchase.
+            Each season: <strong>{perSeasonLbs.toLocaleString()} lbs</strong>. Apply with a fertilizer
+            spreader. No online checkout; call or visit to purchase.
           </p>
           <div className="cta-row" style={{ marginTop: 0, position: 'relative', zIndex: 1 }}>
             <a className="btn btn--primary" href="#buy">
@@ -112,8 +92,8 @@ export function LawnPage() {
           <span>per 1,000 sq ft</span>
         </div>
         <div className="stat">
-          <strong>1/5</strong>
-          <span>the nitrates of chemical fertilizer</span>
+          <strong>Low N</strong>
+          <span>absorbs into soil — kinder to drinking water</span>
         </div>
         <div className="stat">
           <strong>2×</strong>
@@ -123,33 +103,38 @@ export function LawnPage() {
 
       <section className="section" style={{ paddingTop: '2.5rem' }}>
         <div className="section__head">
-          <span className="eyebrow">Proof in progress</span>
+          <span className="eyebrow">Customer proof</span>
           <h2>Before &amp; after lawn health</h2>
           <p>
-            Illustrative pair for the pitch deck while we document a real Central Iowa yard (~15,000 sq ft /
-            0.45 acre): fall castings application, spring follow-up, photos + testimonial as the season
-            unfolds. Swap these for the documented shots when ready.
+            Illustrative before/after while we gather photo documentation. Real results below from a Central
+            Iowa lawn treated fall and spring by 5 Sons Landscaping of Winterset.
           </p>
         </div>
 
         <div className="before-after">
           <figure className="ba-shot">
-            <img src="/proof/lawn-before.png" alt="Patchy lawn before soil improvement with worm castings" />
+            <img
+              src={asset('proof/lawn-before.png')}
+              alt="Patchy lawn before soil improvement with worm castings"
+              width={1200}
+              height={900}
+            />
             <figcaption>
               <strong>Before</strong> — thin cover, stress patches, soil that needs biology
             </figcaption>
           </figure>
           <figure className="ba-shot">
-            <img src="/proof/lawn-after.png" alt="Dense green lawn after worm castings program" />
+            <img
+              src={asset('proof/lawn-after.png')}
+              alt="Dense green lawn after worm castings program"
+              width={1200}
+              height={900}
+            />
             <figcaption>
               <strong>After</strong> — thicker turf from soil-first care (illustrative target look)
             </figcaption>
           </figure>
         </div>
-        <p className="proof-note">
-          Documented program: ~320 lbs fall + ~320 lbs spring for a 15,000 sq ft lawn (20 lbs / 1,000 sq ft).
-          Homeowner applies with a rotary spreader; Ranch supplies castings for the case study.
-        </p>
       </section>
 
       <section className="section" id="nitrates" style={{ paddingTop: '1.5rem' }}>
@@ -171,9 +156,9 @@ export function LawnPage() {
           <article className="compare compare--cast">
             <h3>What castings change at home</h3>
             <p>
-              About <strong>1/5 the nitrates</strong> of chemical fertilizers. Nutrients release slowly and
-              castings help soil hold moisture — so you&apos;re not defaulting to the heaviest soluble-N bag
-              every spring and fall.
+              Worm castings are <strong>low in nitrogen</strong> and absorb better into the soil — helping
+              avoid exacerbating nitrate issues in Central Iowa&apos;s drinking water. They also help soil
+              hold moisture.
             </p>
             <p className="compare__verdict">Household swap that supports soil, not spike-and-flush</p>
           </article>
@@ -189,35 +174,33 @@ export function LawnPage() {
         </div>
       </section>
 
-      <section className="section" style={{ paddingTop: '1.5rem' }}>
+      <section className="section" style={{ paddingTop: '1.5rem' }} aria-labelledby="testimonial-heading">
         <div className="section__head">
-          <span className="eyebrow">Testimonials</span>
-          <h2>What people are saying as this market opens</h2>
+          <span className="eyebrow">Testimonial · shared with permission</span>
+          <h2 id="testimonial-heading">100% improvement — fall and spring</h2>
+        </div>
+
+        <blockquote className="testimonial testimonial--featured">
           <p>
-            Early voices for the lawn campaign. We&apos;ll replace placeholder attributions with named
-            customer quotes and the documented yard testimonial after fall/spring applications.
+            “We had 5 Sons Landscaping of Winterset apply Wildwood worm castings to our struggling lawn in the
+            fall and the spring. These treatments provided a 100% improvement of our lawn. This natural dirt
+            enhancer is safe for pets and people. Worm castings are low in nitrogen and absorb better into the
+            soil to avoid exacerbating the nitrate issues in Central Iowa&apos;s drinking water.”
           </p>
-        </div>
-        <div className="testimonials">
-          {TESTIMONIALS.map((t) => (
-            <blockquote className="testimonial" key={t.name}>
-              <p>“{t.quote}”</p>
-              <footer>
-                <strong>{t.name}</strong>
-                <span>{t.detail}</span>
-              </footer>
-            </blockquote>
-          ))}
-        </div>
+          <footer>
+            <strong>Rick Ball</strong>
+            <span>Applied by 5 Sons Landscaping of Winterset · fall + spring</span>
+          </footer>
+        </blockquote>
       </section>
 
       <BuyInquire sqFt={sqFt} seasons={seasons} estimateLabel={estimateLabel} />
 
       <section className="section" style={{ paddingTop: '1rem' }}>
         <div className="section__head">
-          <span className="eyebrow">Proven application methods</span>
+          <span className="eyebrow">Application methods</span>
           <h2>For the best results</h2>
-          <p>Language ready for market signs and bag inserts.</p>
+          <p>Use a fertilizer spreader for lawns — not a compost spreader (that&apos;s for vermicompost).</p>
         </div>
 
         <div className="panel methods">
@@ -227,8 +210,8 @@ export function LawnPage() {
               <h3>Dry top-dressing</h3>
               <p style={{ marginBottom: '0.35rem' }}>
                 <strong>Best for overall soil health.</strong> Apply about 15–20 pounds per 1,000 sq ft.
-                Broadcast evenly by hand or compost spreader. For best distribution, apply just before mowing
-                and use a mulching attachment.
+                Broadcast evenly by hand or with a <strong>fertilizer spreader</strong>. For best
+                distribution, apply just before mowing and use a mulching attachment.
               </p>
               <p style={{ margin: 0, color: 'var(--muted)' }}>
                 Timing: spring and fall — help roots recover and prep soil for temperature changes.
@@ -240,15 +223,16 @@ export function LawnPage() {
             <div>
               <h3>Post-aeration application</h3>
               <p style={{ margin: 0 }}>
-                <strong>Best for compacted soil.</strong> Rent a core aerator, then spread castings over the
-                grass. Watering or rain washes nutrient-rich castings down into the aeration holes.
+                <strong>Best for compacted soil.</strong> Core-aerate the lawn, then spread castings with a
+                fertilizer spreader. Watering or rain washes nutrient-rich castings down into the aeration
+                holes.
               </p>
             </div>
           </article>
           <article className="method">
             <div className="method__num">3</div>
             <div>
-              <h3>Mix into planting &amp; beds</h3>
+              <h3>Gardens, pots &amp; beds</h3>
               <p style={{ margin: 0 }}>
                 From the ranch brochure: sprinkle as top dressing and gently rake in, or mix about 20%
                 castings into potting soil / seed starter. Safe for all plants — won&apos;t burn, doesn&apos;t

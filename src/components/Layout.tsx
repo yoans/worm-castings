@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import { asset } from '@/lib/assets'
 import { CONTACT } from '@/lib/castings'
 
 export function SiteHeader() {
@@ -6,7 +7,7 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="site-header__inner">
         <NavLink to="/" className="brand">
-          <img src="/brand/whr-logo.png" alt="Wildwood Hills Ranch of Iowa" />
+          <img src={asset('brand/whr-logo.png')} alt="Wildwood Hills Ranch of Iowa" />
           <span className="brand__text">
             <span className="brand__product">Worm Castings</span>
             <span className="brand__ranch">Wildwood Hills Ranch</span>

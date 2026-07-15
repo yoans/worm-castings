@@ -24,17 +24,18 @@ export function LearnPage() {
         <article className="compare compare--cast">
           <h2>Worm castings choice</h2>
           <p>
-            About <strong>1/5 the nitrates</strong> of chemical fertilizers. Microbes + slow release + nutrients
-            anchored in soil structure — better water holding in the root zone.
+            <strong>Low in nitrogen</strong>, absorbs better into the soil, and helps avoid exacerbating
+            nitrate issues in Central Iowa&apos;s drinking water. Microbes + slow release + nutrients that
+            stay in the root zone.
           </p>
           <div
             className="bar bar--fifth"
             role="img"
-            aria-label="Relative nitrate load: about one fifth"
+            aria-label="Relative nitrate load: much lower than chemical fertilizer"
           >
             <span />
           </div>
-          <p className="compare__verdict">Relative nitrate load: about 1/5</p>
+          <p className="compare__verdict">Lower nitrate load · held in the soil</p>
         </article>
       </div>
 
@@ -57,6 +58,48 @@ export function LearnPage() {
         </div>
       </section>
 
+      <section className="section" style={{ paddingTop: '1rem' }} aria-labelledby="worms-heading">
+        <div className="panel panel--readable">
+          <span className="eyebrow">Protect the worms that build your soil</span>
+          <h2 id="worms-heading">Chemical fertilizers can harm earthworms</h2>
+          <p>{COPY.wormProtect}</p>
+          <div className="fact-grid" style={{ marginTop: '1rem' }}>
+            <article className="fact-card">
+              <h3>What hurts worms</h3>
+              <ul>
+                <li>
+                  <strong>Direct toxicity:</strong> anhydrous ammonia and ammonium sulfate can be lethal near
+                  the application zone (sudden pH swings and ammonia toxicity)
+                </li>
+                <li>
+                  <strong>Osmotic stress:</strong> concentrated synthetic salts pull moisture out of worms —
+                  dehydrating them
+                </li>
+                <li>
+                  Pesticides and insecticides are typically highly toxic to earthworms
+                </li>
+              </ul>
+            </article>
+            <article className="fact-card">
+              <h3>What builds worm life</h3>
+              <ul>
+                <li>Shift toward organic alternatives — compost, well-rotted manure, plant mulches</li>
+                <li>Worm castings feed soil life instead of stressing it with synthetic salts</li>
+                <li>
+                  If you must use chemical fertilizer, stick to manufacturer rates — over-application burns
+                  and dehydrates worms
+                </li>
+              </ul>
+            </article>
+          </div>
+          <p className="proof-note" style={{ marginBottom: 0 }}>
+            Regular applications of chemical fertilizer at recommended rates may not wipe out whole
+            populations — and plant growth can add organic matter over time — but if you want to actively
+            protect and grow worms, organics are the clearer path.
+          </p>
+        </div>
+      </section>
+
       <section className="section" style={{ paddingTop: '1rem' }} aria-labelledby="what-castings-heading">
         <div className="section__head">
           <span className="eyebrow">What are worm castings?</span>
@@ -72,15 +115,16 @@ export function LearnPage() {
               <li>Slow-release plant nutrients</li>
               <li>Helps soil hold water and stay aerated</li>
               <li>Anchors nutrients that would otherwise leach away</li>
+              <li>Safe for pets and people</li>
             </ul>
           </article>
           <article className="fact-card">
             <h3>How to use</h3>
             <ul>
-              <li>Top-dress and gently rake into soil</li>
+              <li>Lawns: broadcast with a fertilizer spreader</li>
+              <li>Top-dress gardens and gently rake in</li>
               <li>Mix about 20% into potting soil or seed starter</li>
-              <li>Lawns: 20 lbs per 1,000 sq ft</li>
-              <li>Best timing: fall and spring</li>
+              <li>Lawns: 20 lbs per 1,000 sq ft · fall and spring</li>
             </ul>
           </article>
         </div>

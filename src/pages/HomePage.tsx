@@ -1,14 +1,27 @@
 import { Link } from 'react-router-dom'
+import { asset } from '@/lib/assets'
 import { COPY } from '@/lib/castings'
 
 export function HomePage() {
   return (
     <>
       <section className="hero" aria-label="Worm castings hero">
-        <div className="hero__media" aria-hidden="true" />
+        <div
+          className="hero__media"
+          aria-hidden="true"
+          style={{
+            backgroundImage: `
+              linear-gradient(105deg, rgba(0, 56, 46, 0.88) 0%, rgba(0, 80, 64, 0.55) 45%, rgba(0, 56, 46, 0.35) 100%),
+              url(${asset('brand/hero-lawn.png')})
+            `,
+            backgroundPosition: 'center',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+          }}
+        />
         <div className="hero__content">
           <div className="hero__brand">
-            <img src="/brand/whr-logo.png" alt="" />
+            <img src={asset('brand/whr-logo.png')} alt="" />
             <span style={{ fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', fontSize: '0.8rem' }}>
               Wildwood Hills Ranch of Iowa
             </span>
@@ -47,7 +60,7 @@ export function HomePage() {
           </Link>
           <Link to="/learn" className="path path--learn">
             <h3>Nitrates &amp; soil</h3>
-            <p>Chemical fert reaches for nitrates. Castings feed soil with ~1/5 the nitrate load.</p>
+            <p>Low nitrogen. Absorbs into soil. Protects worms from synthetic-salt shock.</p>
             <span>Portable pamphlet →</span>
           </Link>
           <Link to="/play" className="path path--play">

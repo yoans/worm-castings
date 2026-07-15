@@ -77,8 +77,11 @@ export const COPY = {
   lawnSub:
     'Apply in fall and spring. 20 lbs per 1,000 sq ft of yard. Transform your lawn naturally.',
   nitrateHook:
-    'Lots of people reach for nitrates first. Worm castings carry about 1/5 the nitrates of chemical fertilizers — and they hold nutrients in the soil instead of washing them toward drinking water.',
+    'Lots of people reach for nitrates first. Worm castings are low in nitrogen and absorb better into the soil — helping avoid exacerbating nitrate issues in Central Iowa’s drinking water.',
   waterBanPitch:
     'Central Iowa has faced lawn-watering bans when river nitrates spike and treatment plants hit capacity. Choosing castings won’t fix the watershed alone — but it is one household way to feed your lawn with far less soluble nitrate load, help soil hold water, and ease the habits that add demand during shortages.',
-  safeLine: "Safe for all plants — won't burn them, and it doesn't smell.",
+  safeLine:
+    "Safe for all plants — won't burn them, and it doesn't smell. This natural dirt enhancer is safe for pets and people.",
+  wormProtect:
+    'Certain chemical fertilizers can harm or kill earthworms. High concentrations of synthetic salts dehydrate them, and acidic formulas with ammonium can create toxic environments. Organic matter like worm castings feeds soil life instead of stressing it.',
 } as const
