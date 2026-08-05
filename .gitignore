@@ -1,0 +1,13 @@
+node_modules
+dist
+.DS_Store
+*.local
+.env
+.env.*
+*.tsbuildinfo
+
+# Keep business/private materials out of this public repo
+proposal*.md
+prompt*
+print/
+private/
