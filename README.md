@@ -2,7 +2,8 @@
 
 Public site for Urban Pasture / Wildwood worm castings education, lawn calculator, and kids worm farm.
 
-**Live:** https://yoans.github.io/worm-castings/
+**Live:** https://worm-castings.buildbeyondbelief.com  
+(also: https://yoans.github.io/worm-castings/)
 
 ## Run locally
 
@@ -26,4 +27,5 @@ npm run dev
 npm run deploy
 ```
 
-Publishes the Vite build to the `gh-pages` branch (GitHub Pages).
+Publishes the Vite build to the `gh-pages` branch (GitHub Pages).  
+Custom domain CNAME is in `public/CNAME` → `worm-castings.buildbeyondbelief.com`.
