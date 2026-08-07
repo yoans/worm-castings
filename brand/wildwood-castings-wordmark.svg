@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 140" role="img" aria-labelledby="title">
+  <title id="title">Wildwood Worm Castings wordmark</title>
+  <text
+    x="260"
+    y="78"
+    text-anchor="middle"
+    font-family="Segoe Script, Brush Script MT, Apple Chancery, cursive"
+    font-size="72"
+    fill="#5A3A9A"
+  >Wildwood</text>
+  <text
+    x="260"
+    y="118"
+    text-anchor="middle"
+    font-family="Nunito, Montserrat, Arial, sans-serif"
+    font-size="18"
+    font-weight="700"
+    letter-spacing="0.42em"
+    fill="#5A3A9A"
+  >WORM CASTINGS</text>
+</svg>
