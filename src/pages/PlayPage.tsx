@@ -355,7 +355,6 @@ export function PlayPage() {
                   style={{
                     left: pos.left,
                     top: pos.top,
-                    animationDelay: `${i * 0.09}s`,
                   }}
                 />
               ))}
@@ -364,6 +363,13 @@ export function PlayPage() {
 
           {wormPositions.map((pos, i) => {
             const trick = wormTricks[i]
+            const oneShot =
+              Boolean(trick) ||
+              fx?.kind === 'poop' ||
+              fx?.kind === 'feed' ||
+              fx?.kind === 'browns' ||
+              fx?.kind === 'bad' ||
+              fx?.kind === 'rain'
             return (
               <div
                 key={`w-${i}-${worms}-${trick?.id ?? 0}`}
@@ -382,7 +388,7 @@ export function PlayPage() {
                 style={{
                   left: pos.left,
                   top: pos.top,
-                  animationDelay: trick ? '0s' : `${pos.delay}, ${pos.delay}`,
+                  animationDelay: oneShot ? '0s' : `${pos.delay}, ${pos.delay}`,
                 }}
                 role="button"
                 tabIndex={0}
