@@ -913,7 +913,7 @@ main {
   gap: 1px;
   z-index: 2;
   filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
-  animation: wormWiggle 2.4s ease-in-out infinite;
+  animation: wormCrawlA 5.2s ease-in-out infinite;
   will-change: transform;
   cursor: pointer;
   touch-action: manipulation;
@@ -921,6 +921,16 @@ main {
   padding: 10px 6px;
   margin: -10px -6px;
   box-sizing: content-box;
+}
+
+.bin__worm--crawl-a {
+  animation-name: wormCrawlA;
+}
+.bin__worm--crawl-b {
+  animation-name: wormCrawlB;
+}
+.bin__worm--crawl-c {
+  animation-name: wormCrawlC;
 }
 
 .bin__worm:focus-visible {
@@ -1016,12 +1026,26 @@ main {
   overflow: hidden;
 }
 
-.bin__worm--happy {
-  animation: wormWiggle 1.5s ease-in-out infinite, wormBounce 2s ease-in-out infinite;
+.bin__worm--happy.bin__worm--crawl-a {
+  animation: wormCrawlA 4.4s ease-in-out infinite, wormBounce 2s ease-in-out infinite;
+}
+.bin__worm--happy.bin__worm--crawl-b {
+  animation: wormCrawlB 5.1s ease-in-out infinite, wormBounce 2.2s ease-in-out infinite;
+}
+.bin__worm--happy.bin__worm--crawl-c {
+  animation: wormCrawlC 5.8s ease-in-out infinite, wormBounce 1.8s ease-in-out infinite;
 }
 
-.bin__worm--sad {
-  animation: wormSad 1.8s ease-in-out infinite;
+.bin__worm--sad.bin__worm--crawl-a {
+  animation: wormCrawlSadA 6.5s ease-in-out infinite;
+  filter: saturate(0.65) brightness(0.92);
+}
+.bin__worm--sad.bin__worm--crawl-b {
+  animation: wormCrawlSadB 7.2s ease-in-out infinite;
+  filter: saturate(0.65) brightness(0.92);
+}
+.bin__worm--sad.bin__worm--crawl-c {
+  animation: wormCrawlSadC 6.8s ease-in-out infinite;
   filter: saturate(0.65) brightness(0.92);
 }
 
@@ -1355,19 +1379,69 @@ main {
   animation: beddingFluff 1.6s ease;
 }
 
-@keyframes wormWiggle {
-  0%, 100% { transform: translateX(0) rotate(-6deg); }
-  50% { transform: translateX(16px) rotate(8deg); }
+/* Crawl left & right; scaleX flips the worm to face travel direction */
+@keyframes wormCrawlA {
+  0%   { transform: translate(0, 0) scaleX(1) rotate(-5deg); }
+  16%  { transform: translate(28px, -2px) scaleX(1) rotate(7deg); }
+  20%  { transform: translate(28px, 0) scaleX(-1) rotate(5deg); }
+  42%  { transform: translate(-24px, 2px) scaleX(-1) rotate(-7deg); }
+  46%  { transform: translate(-24px, 0) scaleX(1) rotate(-5deg); }
+  68%  { transform: translate(22px, -3px) scaleX(1) rotate(8deg); }
+  72%  { transform: translate(22px, 0) scaleX(-1) rotate(4deg); }
+  90%  { transform: translate(-10px, 1px) scaleX(-1) rotate(-6deg); }
+  100% { transform: translate(0, 0) scaleX(-1) rotate(5deg); }
+}
+
+@keyframes wormCrawlB {
+  0%   { transform: translate(0, 0) scaleX(-1) rotate(5deg); }
+  22%  { transform: translate(-32px, 2px) scaleX(-1) rotate(-8deg); }
+  26%  { transform: translate(-32px, 0) scaleX(1) rotate(-4deg); }
+  50%  { transform: translate(30px, -2px) scaleX(1) rotate(8deg); }
+  54%  { transform: translate(30px, 0) scaleX(-1) rotate(5deg); }
+  78%  { transform: translate(-18px, 2px) scaleX(-1) rotate(-6deg); }
+  82%  { transform: translate(-18px, 0) scaleX(1) rotate(-4deg); }
+  100% { transform: translate(0, 0) scaleX(1) rotate(-5deg); }
+}
+
+@keyframes wormCrawlC {
+  0%   { transform: translate(0, 0) scaleX(1) rotate(-4deg); }
+  12%  { transform: translate(18px, -1px) scaleX(1) rotate(6deg); }
+  15%  { transform: translate(18px, 0) scaleX(-1) rotate(4deg); }
+  38%  { transform: translate(-34px, 2px) scaleX(-1) rotate(-8deg); }
+  42%  { transform: translate(-34px, 0) scaleX(1) rotate(-5deg); }
+  64%  { transform: translate(26px, -2px) scaleX(1) rotate(7deg); }
+  68%  { transform: translate(26px, 0) scaleX(-1) rotate(5deg); }
+  88%  { transform: translate(-14px, 1px) scaleX(-1) rotate(-6deg); }
+  92%  { transform: translate(-14px, 0) scaleX(1) rotate(-4deg); }
+  100% { transform: translate(0, 0) scaleX(1) rotate(-4deg); }
+}
+
+@keyframes wormCrawlSadA {
+  0%   { transform: translate(0, 0) scaleX(1) rotate(0) scaleY(0.95); }
+  30%  { transform: translate(10px, 1px) scaleX(1) rotate(-2deg) scaleY(0.92); }
+  34%  { transform: translate(10px, 0) scaleX(-1) rotate(2deg) scaleY(0.92); }
+  70%  { transform: translate(-8px, 1px) scaleX(-1) rotate(1deg) scaleY(0.9); }
+  74%  { transform: translate(-8px, 0) scaleX(1) rotate(-1deg) scaleY(0.92); }
+  100% { transform: translate(0, 0) scaleX(1) rotate(0) scaleY(0.95); }
+}
+
+@keyframes wormCrawlSadB {
+  0%   { transform: translate(0, 0) scaleX(-1) rotate(0) scaleY(0.95); }
+  40%  { transform: translate(-12px, 1px) scaleX(-1) rotate(2deg) scaleY(0.9); }
+  44%  { transform: translate(-12px, 0) scaleX(1) rotate(-2deg) scaleY(0.92); }
+  100% { transform: translate(0, 0) scaleX(1) rotate(0) scaleY(0.95); }
+}
+
+@keyframes wormCrawlSadC {
+  0%, 100% { transform: translate(0, 0) scaleX(1) rotate(0) scaleY(0.95); }
+  45%  { transform: translate(8px, 1px) scaleX(1) rotate(-3deg) scaleY(0.9); }
+  50%  { transform: translate(8px, 0) scaleX(-1) rotate(2deg) scaleY(0.92); }
+  90%  { transform: translate(-6px, 0) scaleX(-1) rotate(1deg) scaleY(0.92); }
 }
 
 @keyframes wormBounce {
   0%, 100% { margin-top: 0; }
   50% { margin-top: -5px; }
-}
-
-@keyframes wormSad {
-  0%, 100% { transform: translateX(0) rotate(0) scaleX(1); }
-  50% { transform: translateX(3px) rotate(-3deg) scaleX(0.9); }
 }
 
 @keyframes wormFeast {

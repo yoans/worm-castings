@@ -220,8 +220,9 @@ export function PlayPage() {
       Array.from({ length: Math.min(worms, 8) }, (_, i) => ({
         left: `${12 + ((i * 11) % 70)}%`,
         top: `${52 + ((i * 7) % 28)}%`,
-        delay: `${i * 0.18}s`,
-        size: i % 3 === 0 ? 'lg' : i % 2 === 0 ? 'md' : 'sm',
+        delay: `${(i * 0.37) % 2.4}s`,
+        size: (i % 3 === 0 ? 'lg' : i % 2 === 0 ? 'md' : 'sm') as 'sm' | 'md' | 'lg',
+        crawl: (['a', 'b', 'c'] as const)[i % 3],
       })),
     [worms],
   )
@@ -371,6 +372,7 @@ export function PlayPage() {
                 className={[
                   'bin__worm',
                   `bin__worm--${pos.size}`,
+                  `bin__worm--crawl-${pos.crawl}`,
                   healthy ? 'bin__worm--happy' : 'bin__worm--sad',
                   fx?.kind === 'feed' || fx?.kind === 'browns' ? 'bin__worm--feast' : '',
                   fx?.kind === 'bad' ? 'bin__worm--yuck' : '',
@@ -379,7 +381,11 @@ export function PlayPage() {
                 ]
                   .filter(Boolean)
                   .join(' ')}
-                style={{ left: pos.left, top: pos.top, animationDelay: trick ? '0s' : pos.delay }}
+                style={{
+                  left: pos.left,
+                  top: pos.top,
+                  animationDelay: trick ? '0s' : `${pos.delay}, ${pos.delay}`,
+                }}
                 role="button"
                 tabIndex={0}
                 aria-label={`Tickle worm ${i + 1}`}
