@@ -348,26 +348,17 @@ export function PlayPage() {
           {/* Behind worms: castings pop from the rear and fall with gravity */}
           {fx?.kind === 'poop' && (
             <div className="bin__castings" aria-hidden="true" key={`casts-${fx.id}`}>
-              {wormPositions.flatMap((pos, i) => [
+              {wormPositions.map((pos, i) => (
                 <span
-                  key={`cast-${i}-a`}
+                  key={`cast-${i}`}
                   className="fx-cast"
                   style={{
                     left: pos.left,
                     top: pos.top,
                     animationDelay: `${i * 0.09}s`,
                   }}
-                />,
-                <span
-                  key={`cast-${i}-b`}
-                  className="fx-cast fx-cast--small"
-                  style={{
-                    left: pos.left,
-                    top: pos.top,
-                    animationDelay: `${0.12 + i * 0.09}s`,
-                  }}
-                />,
-              ])}
+                />
+              ))}
             </div>
           )}
 
