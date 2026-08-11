@@ -860,6 +860,14 @@ main {
   animation-play-state: paused !important;
 }
 
+.bin__castings {
+  position: absolute;
+  inset: 0;
+  z-index: 1; /* under worms so pellets leave from behind */
+  pointer-events: none;
+  overflow: hidden;
+}
+
 .bin__sky {
   position: absolute;
   inset: 0 0 55%;
@@ -1042,6 +1050,10 @@ main {
 .bin__worm--trick-spin {
   animation: wormSpin 1s cubic-bezier(0.22, 1, 0.36, 1) both !important;
   z-index: 6;
+}
+
+.bin--fx-poop .bin__worm {
+  animation: wormCastPush 0.55s ease both;
 }
 
 .bin__egg--hatch {
@@ -1256,19 +1268,29 @@ main {
 }
 
 .fx-cast {
-  left: 38%;
-  top: 56%;
-  width: 28px;
-  height: 20px;
-  border-radius: 40%;
-  background: #5a3d28;
-  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.2);
-  animation: castPlop 1.6s ease both;
+  /* Anchored at worm position; anim moves left (rear) then falls */
+  width: 18px;
+  height: 14px;
+  margin-left: 2px;
+  border-radius: 60% 45% 55% 50%;
+  background:
+    radial-gradient(circle at 28% 30%, #8b6348 0%, transparent 50%),
+    radial-gradient(circle at 72% 60%, #5c3d28 0%, #2a1a12 75%);
+  box-shadow:
+    6px 3px 0 -2px #6b4a34,
+    -4px 4px 0 -3px #7a5640,
+    inset 0 -3px 0 rgba(0, 0, 0, 0.28),
+    0 4px 6px rgba(0, 0, 0, 0.35);
+  animation: castDrop 2s cubic-bezier(0.33, 0.02, 0.55, 0.95) both;
+  transform-origin: 50% 50%;
 }
 
-.fx-cast--2 { left: 54%; animation-delay: 0.12s; }
-.fx-cast--3 { left: 46%; top: 66%; animation-delay: 0.24s; }
-.fx-cast--4 { left: 62%; top: 62%; animation-delay: 0.34s; }
+.fx-cast--small {
+  width: 12px;
+  height: 10px;
+  margin-left: -2px;
+  animation-name: castDropSmall;
+}
 
 .fx-x {
   left: 42%;
@@ -1476,17 +1498,69 @@ main {
   100% { transform: scaleX(1) translateX(18px); opacity: 0.15; }
 }
 
-@keyframes castPlop {
+@keyframes wormCastPush {
+  0%, 100% { transform: translateX(0) rotate(-6deg) scale(1); }
+  35% { transform: translateX(10px) rotate(4deg) scale(1.06, 0.92); }
+  60% { transform: translateX(-4px) rotate(-8deg) scale(0.98, 1.04); }
+}
+
+/* Exit from worm rear (left), then accelerate downward like gravity */
+@keyframes castDrop {
   0% {
-    transform: translateY(-18px) scale(0.4);
+    transform: translate(6px, 2px) scale(0.15);
     opacity: 0;
   }
-  45% {
-    transform: translateY(0) scale(1.15);
+  8% {
+    transform: translate(-10px, 4px) scale(0.85);
+    opacity: 1;
+  }
+  16% {
+    transform: translate(-22px, 10px) scale(1.1) rotate(-12deg);
+    opacity: 1;
+  }
+  28% {
+    transform: translate(-26px, 22px) scale(1.05, 0.98) rotate(-4deg);
+  }
+  48% {
+    transform: translate(-20px, 58px) scale(1.08, 0.92) rotate(14deg);
+  }
+  68% {
+    transform: translate(-12px, 105px) scale(1.12, 0.82) rotate(32deg);
+  }
+  86% {
+    transform: translate(-6px, 148px) scale(1.4, 0.48) rotate(8deg);
     opacity: 1;
   }
   100% {
-    transform: translateY(6px) scale(1);
+    transform: translate(-6px, 146px) scale(1.2, 0.6) rotate(4deg);
+    opacity: 0;
+  }
+}
+
+@keyframes castDropSmall {
+  0% {
+    transform: translate(2px, 4px) scale(0.1);
+    opacity: 0;
+  }
+  10% {
+    transform: translate(-16px, 8px) scale(0.9);
+    opacity: 1;
+  }
+  20% {
+    transform: translate(-30px, 16px) scale(1.05) rotate(10deg);
+  }
+  40% {
+    transform: translate(-24px, 52px) scale(1.05, 0.9) rotate(22deg);
+  }
+  65% {
+    transform: translate(-14px, 100px) scale(1.1, 0.8) rotate(40deg);
+  }
+  85% {
+    transform: translate(-8px, 142px) scale(1.35, 0.45) rotate(12deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-8px, 140px) scale(1.15, 0.55) rotate(6deg);
     opacity: 0;
   }
 }

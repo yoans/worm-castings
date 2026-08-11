@@ -145,9 +145,12 @@ export function PlayPage() {
     const id = fxSeq.current
     setFx({ kind, id })
     if (fxTimer.current) window.clearTimeout(fxTimer.current)
-    fxTimer.current = window.setTimeout(() => {
-      setFx((cur) => (cur && cur.id === id ? null : cur))
-    }, 1800)
+    fxTimer.current = window.setTimeout(
+      () => {
+        setFx((cur) => (cur && cur.id === id ? null : cur))
+      },
+      kind === 'poop' ? 2200 : 1800,
+    )
   }
 
   function feed(kind: 'greens' | 'citrus' | 'protein' | 'browns') {
@@ -324,14 +327,6 @@ export function PlayPage() {
                 <span className="fx-baby-worm" />
               </>
             )}
-            {fx?.kind === 'poop' && (
-              <>
-                <span className="fx-cast" />
-                <span className="fx-cast fx-cast--2" />
-                <span className="fx-cast fx-cast--3" />
-                <span className="fx-cast fx-cast--4" />
-              </>
-            )}
             {fx?.kind === 'bad' && (
               <>
                 <span className="fx-x" />
@@ -341,6 +336,32 @@ export function PlayPage() {
               </>
             )}
           </div>
+
+          {/* Behind worms: castings pop from the rear and fall with gravity */}
+          {fx?.kind === 'poop' && (
+            <div className="bin__castings" aria-hidden="true" key={`casts-${fx.id}`}>
+              {wormPositions.flatMap((pos, i) => [
+                <span
+                  key={`cast-${i}-a`}
+                  className="fx-cast"
+                  style={{
+                    left: pos.left,
+                    top: pos.top,
+                    animationDelay: `${i * 0.09}s`,
+                  }}
+                />,
+                <span
+                  key={`cast-${i}-b`}
+                  className="fx-cast fx-cast--small"
+                  style={{
+                    left: pos.left,
+                    top: pos.top,
+                    animationDelay: `${0.12 + i * 0.09}s`,
+                  }}
+                />,
+              ])}
+            </div>
+          )}
 
           {wormPositions.map((pos, i) => {
             const trick = wormTricks[i]
