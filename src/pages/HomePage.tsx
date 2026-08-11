@@ -21,7 +21,7 @@ export function HomePage() {
         />
         <div className="hero__content">
           <div className="hero__brand">
-            <img src={asset('brand/wildwood-bag-badge-photo.png')} alt="" />
+            <img src={asset('brand/wildwood-badge-mark.svg')} alt="" />
             <span style={{ fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', fontSize: '0.8rem' }}>
               Wildwood Worm Castings
             </span>
@@ -93,7 +93,7 @@ export function HomePage() {
       <section className="section container">
         <div className="panel panel--product">
           <div className="panel__product-mark">
-            <img src={asset('brand/wildwood-bag-badge-photo.png')} alt="Wildwood Worm Castings" />
+            <img src={asset('brand/wildwood-badge-mark.svg')} alt="Wildwood Worm Castings" />
           </div>
           <div>
             <span className="eyebrow">100% natural · chemical free</span>

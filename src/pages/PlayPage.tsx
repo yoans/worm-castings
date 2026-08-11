@@ -344,7 +344,7 @@ export function PlayPage() {
         <div className="panel game-panel">
           <div className="game-toolbar">
             <button
-              className={`btn btn--ghost game-pause ${paused ? 'is-paused' : ''}`}
+              className={`btn btn--play-pause game-pause ${paused ? 'is-paused' : ''}`}
               type="button"
               onClick={() => setPaused((p) => !p)}
             >
@@ -376,21 +376,21 @@ export function PlayPage() {
           </div>
 
           <div className="controls">
-            <button className="btn btn--forest" type="button" onClick={() => feed('greens')}>
+            <button className="btn btn--play-greens" type="button" onClick={() => feed('greens')}>
               🥬 Feed greens
             </button>
-            <button className="btn btn--ghost" type="button" onClick={() => feed('browns')}>
+            <button className="btn btn--play-browns" type="button" onClick={() => feed('browns')}>
               🍂 Add browns
             </button>
             <button
-              className="btn btn--ghost"
+              className="btn btn--play-mist"
               type="button"
               onClick={() => adjust('moisture', 12, 'You misted the bin. Moisture up!', 'mist')}
             >
               💧 Mist water
             </button>
             <button
-              className="btn btn--ghost"
+              className="btn btn--play-fluff"
               type="button"
               onClick={() =>
                 adjust('air', 14, 'Fluffed bedding — more air for skin-breathing worms.', 'fluff')
@@ -399,7 +399,7 @@ export function PlayPage() {
               💨 Fluff air
             </button>
             <button
-              className="btn btn--ghost"
+              className="btn btn--play-temp"
               type="button"
               onClick={() =>
                 adjust(
@@ -412,17 +412,13 @@ export function PlayPage() {
             >
               🌡 Fix temp
             </button>
-            <button className="btn btn--ghost" type="button" onClick={rainEvent}>
+            <button className="btn btn--play-rain" type="button" onClick={rainEvent}>
               🌧 Rain storm
             </button>
-            <button className="btn btn--ghost btn--danger-ghost" type="button" onClick={() => feed('citrus')}>
+            <button className="btn btn--play-citrus" type="button" onClick={() => feed('citrus')}>
               🍋 Try citrus?
             </button>
-            <button
-              className="btn btn--ghost btn--danger-ghost"
-              type="button"
-              onClick={() => feed('protein')}
-            >
+            <button className="btn btn--play-protein" type="button" onClick={() => feed('protein')}>
               🍗 Try protein?
             </button>
           </div>

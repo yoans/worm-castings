@@ -8,7 +8,8 @@ export function SiteHeader() {
       <div className="site-header__inner">
         <NavLink to="/" className="brand">
           <img
-            src={asset('brand/wildwood-bag-badge-photo.png')}
+            className="brand__mark"
+            src={asset('brand/wildwood-badge-mark.svg')}
             alt="Wildwood Worm Castings"
           />
           <span className="brand__text">
@@ -17,17 +18,19 @@ export function SiteHeader() {
           </span>
         </NavLink>
         <nav className="nav" aria-label="Primary">
-          <NavLink to="/lawn" className={({ isActive }) => (isActive ? 'active nav--orange' : 'nav--orange')}>
+          <NavLink to="/lawn" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Lawn
           </NavLink>
           <NavLink to="/learn" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Learn
           </NavLink>
           <NavLink to="/play" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            Worm Farm
+            <span className="nav__full">Worm Farm</span>
+            <span className="nav__short">Farm</span>
           </NavLink>
           <a className="nav-phone" href={`tel:${CONTACT.phoneTel}`}>
-            {CONTACT.phoneDisplay}
+            <span className="nav__full">{CONTACT.phoneDisplay}</span>
+            <span className="nav__short">Call</span>
           </a>
         </nav>
       </div>
