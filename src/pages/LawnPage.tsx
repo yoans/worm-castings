@@ -5,21 +5,23 @@ import { asset } from '@/lib/assets'
 import { COPY, RATES, bagsNeeded, estimatePrice, lbsNeeded } from '@/lib/castings'
 
 export function LawnPage() {
-  const [sqFt, setSqFt] = useState(15000)
+  const [sqFt, setSqFt] = useState(5000)
   const [seasons, setSeasons] = useState(2)
+  const presets = [2000, 5000, 10000, 15000, 25000, 50000]
+  const presetValue = presets.includes(sqFt) ? String(sqFt) : ''
 
   const result = useMemo(() => estimatePrice(sqFt, seasons), [sqFt, seasons])
   const perSeasonLbs = lbsNeeded(sqFt)
   const perSeasonBags = bagsNeeded(sqFt)
-  const estimateLabel = `~${result.lbs.toLocaleString()} lbs · ~$${result.price.toLocaleString()}`
+  const estimateLabel = `~${result.lbs.toLocaleString()} lbs (~${result.bags} bags) · ~$${result.price.toLocaleString()}`
 
   return (
     <div className="container page-hero">
-      <span className="eyebrow">Fall lawn push · call or visit to buy</span>
+      <span className="eyebrow">A healthier way to greener lawns</span>
       <h1>{COPY.lawnHeadline}</h1>
       <p>
-        Boost lawn health naturally by applying worm castings in fall and spring. Size your yard, see the
-        nitrate / water-ban pitch, then call or visit the Ranch — there is no online cart yet.
+        Size your yard, see bags and price, then call or text to order. Apply with a fertilizer spreader —
+        fall and spring for best results.
       </p>
 
       <div className="calc" style={{ marginTop: '1.75rem' }}>
@@ -35,13 +37,20 @@ export function LawnPage() {
           />
 
           <label htmlFor="preset">Quick presets</label>
-          <select id="preset" value={String(sqFt)} onChange={(e) => setSqFt(Number(e.target.value))}>
+          <select
+            id="preset"
+            value={presetValue}
+            onChange={(e) => setSqFt(Number(e.target.value))}
+          >
+            <option value="" disabled>
+              Custom size
+            </option>
             <option value="2000">Small city lot · 2,000 sq ft</option>
             <option value="5000">Typical lot · 5,000 sq ft</option>
             <option value="10000">Large lot · 10,000 sq ft</option>
             <option value="15000">~0.45 acre lawn · 15,000 sq ft</option>
             <option value="25000">Estate · 25,000 sq ft</option>
-            <option value="50000">Two applications on 25k · 50,000 sq ft total</option>
+            <option value="50000">50,000 sq ft</option>
           </select>
 
           <label htmlFor="seasons">Application plan</label>
@@ -51,10 +60,9 @@ export function LawnPage() {
           </select>
 
           <p style={{ color: 'var(--muted)', marginBottom: 0 }}>
-            Rate: <strong>{RATES.lbsPerThousandSqFt} lbs per 1,000 sq ft</strong>. Pricing guide from Ranch
-            conversations: about ${RATES.pricePerTwoThousandSqFt} per 2,000 sq ft · ${RATES.bulkPrice} for{' '}
-            {RATES.bulkLbs.toLocaleString()} lbs. Bag weight shown as ~{RATES.bagLbs} lb for estimates — confirm
-            when you call.
+            Rate: <strong>{RATES.lbsPerThousandSqFt} lbs per 1,000 sq ft</strong>. Price:{' '}
+            <strong>${RATES.bagPrice} per {RATES.bagLbs} lb bag</strong> (covers 2,000 sq ft) · $
+            {RATES.smallBagPrice} {RATES.smallBagLabel} · ${RATES.bulkPrice} per 1,000 lb.
           </p>
         </div>
 
@@ -63,7 +71,8 @@ export function LawnPage() {
             <div className="calc__metric">
               {result.lbs.toLocaleString()} lbs
               <small>
-                {seasons === 2 ? 'Fall + spring total' : 'This season'} · ~{perSeasonBags} bags / season (est.)
+                {seasons === 2 ? 'Fall + spring total' : 'This season'} · {result.bags} × {RATES.bagLbs} lb
+                bags
               </small>
             </div>
           </div>
@@ -72,19 +81,40 @@ export function LawnPage() {
             <small>{result.note}</small>
           </div>
           <p style={{ margin: 0, position: 'relative', zIndex: 1 }}>
-            Each season: <strong>{perSeasonLbs.toLocaleString()} lbs</strong>. Apply with a fertilizer
-            spreader. No online checkout; call or visit to purchase.
+            Each season: <strong>{perSeasonLbs.toLocaleString()} lbs</strong> ({perSeasonBags} bags). Apply
+            with a fertilizer spreader.
           </p>
           <div className="cta-row" style={{ marginTop: 0, position: 'relative', zIndex: 1 }}>
             <a className="btn btn--primary" href="#buy">
-              Call / visit to buy
+              Call / text to buy
             </a>
             <a className="btn btn--secondary" href="#nitrates">
-              Why this helps in water bans
+              Why castings help
             </a>
           </div>
         </div>
       </div>
+
+      <section className="section" style={{ paddingTop: '2rem' }} aria-labelledby="proof-heading">
+        <div className="section__head">
+          <span className="eyebrow">Proof from a real lawn</span>
+          <h2 id="proof-heading">Before and after</h2>
+        </div>
+        <div className="before-after">
+          <figure className="ba-shot">
+            <img src={asset('proof/lawn-before.png')} alt="Lawn before worm castings" />
+            <figcaption>
+              <strong>Before</strong>
+            </figcaption>
+          </figure>
+          <figure className="ba-shot">
+            <img src={asset('proof/lawn-after-real.png')} alt="Lawn after worm castings" />
+            <figcaption>
+              <strong>After</strong> fall + spring applications
+            </figcaption>
+          </figure>
+        </div>
+      </section>
 
       <div className="stat-strip">
         <div className="stat">
@@ -92,52 +122,16 @@ export function LawnPage() {
           <span>per 1,000 sq ft</span>
         </div>
         <div className="stat">
-          <strong>Low N</strong>
-          <span>absorbs into soil — kinder to drinking water</span>
+          <strong>80% lower</strong>
+          <span>total nitrogen by weight*</span>
         </div>
         <div className="stat">
-          <strong>2×</strong>
-          <span>fall + spring for best lawn recovery</span>
+          <strong>$40</strong>
+          <span>per 40 lb bag · covers 2,000 sq ft</span>
         </div>
       </div>
 
-      <section className="section" style={{ paddingTop: '2.5rem' }}>
-        <div className="section__head">
-          <span className="eyebrow">Customer proof</span>
-          <h2>Before &amp; after lawn health</h2>
-          <p>
-            Illustrative before/after while we gather photo documentation. Real results below from a Central
-            Iowa lawn treated fall and spring by 5 Sons Landscaping of Winterset.
-          </p>
-        </div>
-
-        <div className="before-after">
-          <figure className="ba-shot">
-            <img
-              src={asset('proof/lawn-before.png')}
-              alt="Patchy lawn before soil improvement with worm castings"
-              width={1200}
-              height={900}
-            />
-            <figcaption>
-              <strong>Before</strong> — thin cover, stress patches, soil that needs biology
-            </figcaption>
-          </figure>
-          <figure className="ba-shot">
-            <img
-              src={asset('proof/lawn-after.png')}
-              alt="Dense green lawn after worm castings program"
-              width={1200}
-              height={900}
-            />
-            <figcaption>
-              <strong>After</strong> — thicker turf from soil-first care (illustrative target look)
-            </figcaption>
-          </figure>
-        </div>
-      </section>
-
-      <section className="section" id="nitrates" style={{ paddingTop: '1.5rem' }}>
+      <section className="section" id="nitrates" style={{ paddingTop: '2.5rem' }}>
         <div className="section__head">
           <span className="eyebrow">Nitrates · water bans · shortages</span>
           <h2>Less soluble nitrate. More water held in the lawn.</h2>
@@ -156,16 +150,15 @@ export function LawnPage() {
           <article className="compare compare--cast">
             <h3>What castings change at home</h3>
             <p>
-              Worm castings are <strong>low in nitrogen</strong> and absorb better into the soil — helping
-              avoid exacerbating nitrate issues in Central Iowa&apos;s drinking water. They also help soil
-              hold moisture.
+              Wildwood castings contain <strong>2% total nitrogen</strong> — 80% lower by weight than a
+              fertilizer labeled 10% total nitrogen. They support a slower, soil-first approach while feeding
+              turf.
             </p>
-            <p className="compare__verdict">Household swap that supports soil, not spike-and-flush</p>
+            <p className="compare__verdict">Slow-release nutrition that stays where you put it</p>
           </article>
         </div>
         <p className="proof-note">
-          Honest frame: farm runoff drives most river nitrates. Your yard is still a place to model better
-          habits — especially when neighbors are living through watering bans.
+          *Comparison is based on total nitrogen by weight; product application rates differ.
         </p>
         <div className="cta-row">
           <Link className="btn btn--ghost" to="/learn">
@@ -200,7 +193,7 @@ export function LawnPage() {
         <div className="section__head">
           <span className="eyebrow">Application methods</span>
           <h2>For the best results</h2>
-          <p>Use a fertilizer spreader for lawns — not a compost spreader (that&apos;s for vermicompost).</p>
+          <p>Use a fertilizer spreader for lawns — not a compost spreader.</p>
         </div>
 
         <div className="panel methods">
@@ -234,29 +227,11 @@ export function LawnPage() {
             <div>
               <h3>Gardens, pots &amp; beds</h3>
               <p style={{ margin: 0 }}>
-                From the ranch brochure: sprinkle as top dressing and gently rake in, or mix about 20%
-                castings into potting soil / seed starter. Safe for all plants — won&apos;t burn, doesn&apos;t
-                smell.
+                Top-dress and gently rake in, or mix about <strong>{RATES.pottingMixPercent}%</strong> castings
+                into potting soil / seed starter. Natural and odor-free; follow label directions.
               </p>
             </div>
           </article>
-        </div>
-      </section>
-
-      <section className="section" style={{ paddingTop: '1rem' }}>
-        <div className="panel" style={{ background: 'linear-gradient(135deg, #fff8e6, #f3faf5)' }}>
-          <span className="eyebrow" style={{ color: 'var(--ranch-orange-deep)' }}>
-            Mid-August signage
-          </span>
-          <h2>Market board copy</h2>
-          <ul style={{ margin: 0, paddingLeft: '1.1rem', color: 'var(--forest-deep)', fontWeight: 700 }}>
-            <li>Boost lawn growth naturally with worm castings.</li>
-            <li>Boost lawn health naturally with worm castings.</li>
-            <li>Boost lawn health naturally by applying worm castings in fall and spring.</li>
-            <li>20 lbs per 1,000 sq ft.</li>
-            <li>Transform your lawn naturally with worm castings!</li>
-            <li>Call 641-396-2414 · 2552 Union Lane, St. Charles</li>
-          </ul>
         </div>
       </section>
     </div>

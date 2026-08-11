@@ -18,7 +18,7 @@ export function BuyInquire({ sqFt, seasons, estimateLabel }: BuyInquireProps) {
   )
 
   const smsHref = `sms:${CONTACT.phoneTel}?&body=${encodeURIComponent(message)}`
-  const mailHref = `mailto:?subject=${encodeURIComponent('Worm castings lawn inquiry')}&body=${encodeURIComponent(message)}`
+  const mailHref = `mailto:${CONTACT.email}?subject=${encodeURIComponent('Worm castings lawn inquiry')}&body=${encodeURIComponent(message)}`
 
   async function copyMessage() {
     try {
@@ -33,38 +33,41 @@ export function BuyInquire({ sqFt, seasons, estimateLabel }: BuyInquireProps) {
   return (
     <section className="section" id="buy" style={{ paddingTop: '2rem' }}>
       <div className="section__head">
-        <span className="eyebrow">No online checkout yet</span>
-        <h2>Call, visit, or send your yard estimate</h2>
+        <span className="eyebrow">Call or text to order</span>
+        <h2>Get castings for your lawn</h2>
         <p>
-          Research confirms Wildwood sells castings by inquiry — not a live cart. Use the Ranch phone or
-          address. A Stripe storefront can plug in later; this path works for Farmer&apos;s Market season now.
+          No online cart — call or text your yard estimate and we&apos;ll confirm bags, pickup, or delivery.
         </p>
       </div>
 
       <div className="buy-grid">
         <div className="panel buy-card">
-          <h3>Buy / inquire here</h3>
+          <h3>Buy / inquire</h3>
           <p className="buy-card__place">
-            <strong>{CONTACT.ranchName}</strong>
+            <strong>{CONTACT.productName}</strong>
+            <br />
+            {CONTACT.ranchName}
             <br />
             {CONTACT.addressLine1}
             <br />
             {CONTACT.addressLine2}
           </p>
           <a className="btn btn--primary buy-card__phone" href={`tel:${CONTACT.phoneTel}`}>
-            Call {CONTACT.phoneDisplay}
+            Call or text {CONTACT.phoneDisplay}
           </a>
           <div className="cta-row" style={{ marginTop: '0.75rem' }}>
+            <a className="btn btn--ghost" href={`mailto:${CONTACT.email}`}>
+              Email us
+            </a>
             <a className="btn btn--ghost" href={CONTACT.mapsUrl} target="_blank" rel="noreferrer">
               Open in Maps
             </a>
-            <a className="btn btn--ghost" href={CONTACT.contactPage} target="_blank" rel="noreferrer">
-              Ranch contact page
-            </a>
           </div>
+          <p className="buy-card__note">
+            <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+          </p>
           <p className="buy-card__note">{CONTACT.directions}</p>
           <p className="buy-card__note" style={{ marginBottom: 0 }}>
-            Ask about inventory, bag sizes, Farmer&apos;s Market pickup, and delivery for larger lawn orders.
             Your estimate: <strong>{estimateLabel}</strong>
           </p>
         </div>
@@ -72,7 +75,7 @@ export function BuyInquire({ sqFt, seasons, estimateLabel }: BuyInquireProps) {
         <div className="panel calc__form">
           <h3>Build your inquiry</h3>
           <p style={{ color: 'var(--muted)' }}>
-            We prefill your calculator numbers. Call, text, email, or copy — staff can confirm price and
+            Prefills your calculator numbers. Call, text, email, or copy — we&apos;ll confirm total and
             availability.
           </p>
 
@@ -90,11 +93,11 @@ export function BuyInquire({ sqFt, seasons, estimateLabel }: BuyInquireProps) {
             id="buyer-note"
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            placeholder="Pickup timing, delivery, market day…"
+            placeholder="Pickup timing, delivery…"
           />
 
           <label htmlFor="inquiry-preview">Message preview</label>
-          <textarea id="inquiry-preview" className="inquiry-preview" readOnly rows={8} value={message} />
+          <textarea id="inquiry-preview" className="inquiry-preview" readOnly rows={9} value={message} />
 
           <div className="cta-row">
             <a className="btn btn--forest" href={`tel:${CONTACT.phoneTel}`}>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 type Meters = {
@@ -8,9 +8,14 @@ type Meters = {
   food: number
 }
 
+type FxKind = 'feed' | 'browns' | 'mist' | 'fluff' | 'temp' | 'rain' | 'hatch' | 'poop' | 'bad'
+
+type FxState = { kind: FxKind; id: number }
+
+/** David: keep room temp 65–85°F; humidity/moisture below 65% is the big risk. */
 const IDEAL = {
-  temp: [55, 80] as const,
-  moisture: [55, 75] as const,
+  temp: [65, 85] as const,
+  moisture: [65, 85] as const,
   air: [40, 90] as const,
   food: [35, 85] as const,
 }
@@ -25,14 +30,14 @@ function clamp(n: number, min = 0, max = 100) {
 
 function meterColor(value: number, range: readonly [number, number]) {
   if (inRange(value, range)) return 'var(--lime)'
-  if (value < range[0] - 15 || value > range[1] + 15) return '#d64545'
+  if (value < range[0] - 12 || value > range[1] + 12) return '#d64545'
   return 'var(--ranch-orange)'
 }
 
 export function PlayPage() {
   const [meters, setMeters] = useState<Meters>({
-    temp: 68,
-    moisture: 65,
+    temp: 72,
+    moisture: 70,
     air: 60,
     food: 55,
   })
@@ -42,6 +47,12 @@ export function PlayPage() {
   const [day, setDay] = useState(1)
   const [message, setMessage] = useState('Keep your worms cozy. Watch eggs. Collect castings!')
   const [lastFood, setLastFood] = useState<'good' | 'bad' | null>(null)
+  const [fx, setFx] = useState<FxState | null>(null)
+  const [paused, setPaused] = useState(false)
+  const [toastPop, setToastPop] = useState(0)
+  const [scorePop, setScorePop] = useState<Record<string, number>>({})
+  const fxTimer = useRef<number | null>(null)
+  const fxSeq = useRef(0)
 
   const healthy = useMemo(() => {
     return (
@@ -53,11 +64,10 @@ export function PlayPage() {
   }, [meters])
 
   const hatchReady =
-    eggs > 0 &&
-    inRange(meters.temp, IDEAL.temp) &&
-    inRange(meters.moisture, IDEAL.moisture)
+    eggs > 0 && inRange(meters.temp, IDEAL.temp) && inRange(meters.moisture, IDEAL.moisture)
 
   useEffect(() => {
+    if (paused) return
     const id = window.setInterval(() => {
       setMeters((m) => ({
         temp: clamp(m.temp + (Math.random() * 4 - 2)),
@@ -66,33 +76,71 @@ export function PlayPage() {
         food: clamp(m.food - 1.5),
       }))
       setDay((d) => d + 1)
-    }, 2800)
+    }, 3200)
     return () => window.clearInterval(id)
-  }, [])
+  }, [paused])
 
   useEffect(() => {
+    if (day === 1) return
     if (!healthy) {
-      setMessage('Uh-oh — conditions are drifting. Adjust temp, moisture, air, or food.')
+      say('Uh-oh — conditions are drifting. Keep temp 65–85°F and moisture ≥65%.')
       return
     }
-    setCastings((c) => c + Math.max(1, Math.floor(worms / 2)))
+    setCastings((c) => {
+      const next = c + Math.max(1, Math.floor(worms / 2))
+      popScore('castings')
+      return next
+    })
+    bumpFx('poop')
     if (hatchReady && day % 4 === 0) {
       setEggs((e) => Math.max(0, e - 1))
-      setWorms((w) => w + 1)
-      setMessage('An egg hatched! More worms = more castings.')
+      setWorms((w) => {
+        popScore('worms')
+        return w + 1
+      })
+      popScore('eggs')
+      bumpFx('hatch')
+      say('An egg hatched! More worms = more castings for the garden.')
     } else if (day % 5 === 0 && worms >= 2) {
-      setEggs((e) => e + 1)
-      setMessage('Your worms left a new egg. Keep moisture & temp just right to hatch it.')
+      setEggs((e) => {
+        popScore('eggs')
+        return e + 1
+      })
+      say('Your worms left a new egg. Keep moisture & temp just right to hatch it.')
     } else {
-      setMessage('Happy worms! They breathe through their skin and are busy pooping castings.')
+      say('Happy worms! They breathe through their skin and leave castings behind.')
     }
   }, [day]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  function say(text: string) {
+    setMessage(text)
+    setToastPop((n) => n + 1)
+  }
+
+  function popScore(key: string) {
+    setScorePop((s) => ({ ...s, [key]: (s[key] || 0) + 1 }))
+  }
+
+  function bumpFx(kind: FxKind) {
+    fxSeq.current += 1
+    const id = fxSeq.current
+    setFx({ kind, id })
+    if (fxTimer.current) window.clearTimeout(fxTimer.current)
+    fxTimer.current = window.setTimeout(() => {
+      setFx((cur) => (cur && cur.id === id ? null : cur))
+    }, 1200)
+  }
 
   function feed(kind: 'greens' | 'citrus' | 'protein' | 'browns') {
     if (kind === 'citrus' || kind === 'protein') {
       setLastFood('bad')
-      setMeters((m) => ({ ...m, food: clamp(m.food - 18), moisture: clamp(m.moisture + (kind === 'citrus' ? 8 : 0)) }))
-      setMessage(
+      bumpFx('bad')
+      setMeters((m) => ({
+        ...m,
+        food: clamp(m.food - 18),
+        moisture: clamp(m.moisture + (kind === 'citrus' ? 8 : 0)),
+      }))
+      say(
         kind === 'citrus'
           ? 'No citrus! It upsets the bin.'
           : 'No protein — worms can get protein poisoning. Stick to plant scraps.',
@@ -100,23 +148,30 @@ export function PlayPage() {
       return
     }
     setLastFood('good')
+    bumpFx(kind === 'greens' ? 'feed' : 'browns')
     setMeters((m) => ({
       ...m,
       food: clamp(m.food + (kind === 'greens' ? 18 : 10)),
       moisture: clamp(m.moisture + (kind === 'greens' ? 6 : -4)),
       air: clamp(m.air + (kind === 'browns' ? 8 : -2)),
     }))
-    setMessage(kind === 'greens' ? 'Yum — plant scraps!' : 'Browns help airflow and balance moisture.')
+    say(
+      kind === 'greens'
+        ? 'Yum — plant scraps! Worms wiggle in for dinner.'
+        : 'Browns balance the bin and help airflow.',
+    )
   }
 
-  function adjust(key: keyof Meters, delta: number, note: string) {
+  function adjust(key: keyof Meters, delta: number, note: string, kind: FxKind) {
     setMeters((m) => ({ ...m, [key]: clamp(m[key] + delta) }))
-    setMessage(note)
+    bumpFx(kind)
+    say(note)
   }
 
   function rainEvent() {
     setMeters((m) => ({ ...m, moisture: clamp(m.moisture + 22), air: clamp(m.air - 10) }))
-    setMessage('Heavy rain! Worms breathe through their skin — too wet and they crawl up for air.')
+    bumpFx('rain')
+    say('Heavy rain! Worms breathe through their skin — too wet and they crawl up for air.')
   }
 
   const wormPositions = useMemo(
@@ -124,7 +179,8 @@ export function PlayPage() {
       Array.from({ length: Math.min(worms, 8) }, (_, i) => ({
         left: `${12 + ((i * 11) % 70)}%`,
         top: `${52 + ((i * 7) % 28)}%`,
-        delay: `${i * 0.2}s`,
+        delay: `${i * 0.18}s`,
+        size: i % 3 === 0 ? 'lg' : i % 2 === 0 ? 'md' : 'sm',
       })),
     [worms],
   )
@@ -138,63 +194,185 @@ export function PlayPage() {
     [eggs],
   )
 
+  const binClass = [
+    'bin',
+    healthy ? 'bin--healthy' : 'bin--stressed',
+    fx ? `bin--fx-${fx.kind}` : '',
+    fx?.kind === 'feed' || fx?.kind === 'browns' ? 'bin--worms-feast' : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
   return (
     <div className="container page-hero">
       <span className="eyebrow">Ages 5–10 · parental guidance</span>
       <h1>Keep your worm farm alive</h1>
       <p>
-        Narrow ranges matter: temperature, humidity, soil moisture, air movement, and the right food. Shelter
-        from birds. Hatch eggs. Watch the castings pile up.
+        Keep temp between 65–85°F and moisture at 65%+. Right food, enough air, watch eggs hatch, and collect
+        castings — the living fertilizer that helps lawns and gardens.
       </p>
 
       <div className="game-shell" style={{ marginTop: '1.5rem' }}>
-        <div className="bin" aria-label="Worm bin">
-          <div className="bin__soil" />
+        <div className={binClass} aria-label="Worm bin">
+          <div className="bin__sky" aria-hidden="true" />
+          <div className="bin__soil">
+            <span className="bin__bedding" />
+            <span className="bin__bedding bin__bedding--2" />
+          </div>
+
+          <div className="bin__fx" aria-hidden="true" key={fx ? `${fx.kind}-${fx.id}` : 'idle'}>
+            {fx?.kind === 'feed' && (
+              <>
+                <span className="fx-leaf" />
+                <span className="fx-leaf fx-leaf--2" />
+                <span className="fx-leaf fx-leaf--3" />
+                <span className="fx-crumb" />
+                <span className="fx-crumb fx-crumb--2" />
+              </>
+            )}
+            {fx?.kind === 'browns' && (
+              <>
+                <span className="fx-brown" />
+                <span className="fx-brown fx-brown--2" />
+                <span className="fx-brown fx-brown--3" />
+                <span className="fx-puff" />
+                <span className="fx-puff fx-puff--2" />
+              </>
+            )}
+            {fx?.kind === 'mist' && (
+              <>
+                <span className="fx-spray" />
+                <span className="fx-drop" />
+                <span className="fx-drop fx-drop--2" />
+                <span className="fx-drop fx-drop--3" />
+                <span className="fx-drop fx-drop--4" />
+                <span className="fx-drop fx-drop--5" />
+              </>
+            )}
+            {fx?.kind === 'fluff' && (
+              <>
+                <span className="fx-puff" />
+                <span className="fx-puff fx-puff--2" />
+                <span className="fx-puff fx-puff--3" />
+                <span className="fx-puff fx-puff--4" />
+                <span className="fx-swirl" />
+              </>
+            )}
+            {fx?.kind === 'temp' && (
+              <>
+                <span className="fx-thermo" />
+                <span className="fx-warm" />
+                <span className="fx-warm fx-warm--2" />
+              </>
+            )}
+            {fx?.kind === 'rain' && (
+              <>
+                <span className="fx-cloud" />
+                <span className="fx-rain" />
+                <span className="fx-rain fx-rain--2" />
+                <span className="fx-rain fx-rain--3" />
+                <span className="fx-rain fx-rain--4" />
+                <span className="fx-rain fx-rain--5" />
+                <span className="fx-rain fx-rain--6" />
+                <span className="fx-splash" />
+              </>
+            )}
+            {fx?.kind === 'hatch' && (
+              <>
+                <span className="fx-spark" />
+                <span className="fx-spark fx-spark--2" />
+                <span className="fx-spark fx-spark--3" />
+                <span className="fx-baby-worm" />
+              </>
+            )}
+            {fx?.kind === 'poop' && (
+              <>
+                <span className="fx-cast" />
+                <span className="fx-cast fx-cast--2" />
+                <span className="fx-cast fx-cast--3" />
+                <span className="fx-cast fx-cast--4" />
+              </>
+            )}
+            {fx?.kind === 'bad' && (
+              <>
+                <span className="fx-x" />
+                <span className="fx-x fx-x--2" />
+                <span className="fx-stink" />
+                <span className="fx-stink fx-stink--2" />
+              </>
+            )}
+          </div>
+
           {wormPositions.map((pos, i) => (
             <div
-              key={`w-${i}`}
-              className="bin__worm"
+              key={`w-${i}-${worms}`}
+              className={[
+                'bin__worm',
+                `bin__worm--${pos.size}`,
+                healthy ? 'bin__worm--happy' : 'bin__worm--sad',
+                fx?.kind === 'feed' || fx?.kind === 'browns' ? 'bin__worm--feast' : '',
+                fx?.kind === 'bad' ? 'bin__worm--yuck' : '',
+                fx?.kind === 'rain' ? 'bin__worm--climb' : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
               style={{ left: pos.left, top: pos.top, animationDelay: pos.delay }}
+            >
+              <span className="bin__worm-seg" />
+              <span className="bin__worm-seg" />
+              <span className="bin__worm-seg" />
+              <span className="bin__worm-eye" />
+            </div>
+          ))}
+
+          {eggPositions.map((pos, i) => (
+            <div
+              key={`e-${i}-${eggs}`}
+              className={`bin__egg ${fx?.kind === 'hatch' && i === 0 ? 'bin__egg--hatch' : ''}`}
+              style={{ left: pos.left, top: pos.top }}
             />
           ))}
-          {eggPositions.map((pos, i) => (
-            <div key={`e-${i}`} className="bin__egg" style={{ left: pos.left, top: pos.top }} />
-          ))}
-          <div
-            style={{
-              position: 'absolute',
-              left: '1rem',
-              top: '1rem',
-              right: '1rem',
-              display: 'flex',
-              justifyContent: 'space-between',
-              gap: '0.5rem',
-              flexWrap: 'wrap',
-            }}
-          >
-            <ScoreChip label="Day" value={day} />
-            <ScoreChip label="Worms" value={worms} />
-            <ScoreChip label="Eggs" value={eggs} />
-            <ScoreChip label="Castings" value={castings} accent />
+
+          <div className="bin__scores">
+            <ScoreChip label="Day" value={day} popKey={scorePop.day} />
+            <ScoreChip label="Worms" value={worms} popKey={scorePop.worms} />
+            <ScoreChip label="Eggs" value={eggs} popKey={scorePop.eggs} />
+            <ScoreChip label="Castings" value={castings} accent popKey={scorePop.castings} />
           </div>
         </div>
 
-        <div className="panel">
+        <div className="panel game-panel">
+          <div className="game-toolbar">
+            <button
+              className={`btn btn--ghost game-pause ${paused ? 'is-paused' : ''}`}
+              type="button"
+              onClick={() => setPaused((p) => !p)}
+            >
+              {paused ? 'Resume' : 'Pause'}
+            </button>
+            <span className="game-toolbar__hint">{paused ? 'Day clock paused' : 'Day clock running'}</span>
+          </div>
+
           <div className="meters">
-            <Meter
-              label="Temperature"
-              value={meters.temp}
-              range={IDEAL.temp}
-              hint="Worms like it not too hot, not too cold"
-            />
+            <Meter label="Temperature" value={meters.temp} range={IDEAL.temp} hint="Keep 65–85°F" unit="°" />
             <Meter
               label="Soil moisture"
               value={meters.moisture}
               range={IDEAL.moisture}
-              hint="Damp like a wrung-out sponge — eggs need this to hatch"
+              hint="Keep at or above 65% — damp like a wrung-out sponge"
             />
-            <Meter label="Air movement" value={meters.air} range={IDEAL.air} hint="They breathe through their skin" />
-            <Meter label="Food balance" value={meters.food} range={IDEAL.food} hint="Greens + browns, never citrus or protein" />
+            <Meter
+              label="Air movement"
+              value={meters.air}
+              range={IDEAL.air}
+              hint="They breathe through their skin"
+            />
+            <Meter
+              label="Food balance"
+              value={meters.food}
+              range={IDEAL.food}
+              hint="Greens + browns, never citrus or protein"
+            />
           </div>
 
           <div className="controls">
@@ -207,43 +385,56 @@ export function PlayPage() {
             <button
               className="btn btn--ghost"
               type="button"
-              onClick={() => adjust('moisture', 12, 'You misted the bin. Moisture up!')}
+              onClick={() => adjust('moisture', 12, 'You misted the bin. Moisture up!', 'mist')}
             >
               Mist water
             </button>
             <button
               className="btn btn--ghost"
               type="button"
-              onClick={() => adjust('air', 14, 'Fluffed bedding — more air for skin-breathing worms.')}
+              onClick={() =>
+                adjust('air', 14, 'Fluffed bedding — more air for skin-breathing worms.', 'fluff')
+              }
             >
               Fluff air
             </button>
             <button
               className="btn btn--ghost"
               type="button"
-              onClick={() => adjust('temp', meters.temp > 70 ? -10 : 10, 'Moved the bin to a better temperature.')}
+              onClick={() =>
+                adjust(
+                  'temp',
+                  meters.temp > 75 ? -10 : 10,
+                  'Moved the bin to a cozier temperature.',
+                  'temp',
+                )
+              }
             >
               Fix temp
             </button>
             <button className="btn btn--ghost" type="button" onClick={rainEvent}>
               Rain storm
             </button>
-            <button className="btn btn--ghost" type="button" onClick={() => feed('citrus')}>
+            <button className="btn btn--ghost btn--danger-ghost" type="button" onClick={() => feed('citrus')}>
               Try citrus?
             </button>
-            <button className="btn btn--ghost" type="button" onClick={() => feed('protein')}>
+            <button
+              className="btn btn--ghost btn--danger-ghost"
+              type="button"
+              onClick={() => feed('protein')}
+            >
               Try protein?
             </button>
           </div>
 
-          <div className="toast" role="status">
+          <div className={`toast ${lastFood === 'bad' ? 'toast--warn' : ''}`} role="status" key={toastPop}>
             {message}
             {lastFood === 'bad' ? ' Ask a grown-up why that food is unsafe.' : null}
           </div>
 
           <div className="cta-row" style={{ marginTop: '1rem' }}>
-            <Link className="btn btn--primary" to="/lawn#buy">
-              Grown-ups: size lawn &amp; call to buy
+            <Link className="btn btn--primary" to="/lawn">
+              Grown-ups: size your lawn
             </Link>
             <Link className="btn btn--ghost" to="/learn">
               Learn about castings
@@ -259,23 +450,20 @@ function ScoreChip({
   label,
   value,
   accent,
+  popKey,
 }: {
   label: string
   value: number
   accent?: boolean
+  popKey?: number
 }) {
   return (
     <div
-      style={{
-        background: accent ? 'var(--ranch-orange)' : 'rgba(255,255,255,0.92)',
-        color: accent ? 'var(--soil)' : 'var(--forest-deep)',
-        borderRadius: '999px',
-        padding: '0.35rem 0.75rem',
-        fontWeight: 800,
-        fontSize: '0.85rem',
-      }}
+      className={`score-chip ${accent ? 'score-chip--accent' : ''} ${popKey ? 'score-chip--pop' : ''}`}
+      key={`${label}-${popKey || 0}-${value}`}
     >
-      {label}: {value}
+      <span className="score-chip__label">{label}</span>
+      <span className="score-chip__value">{value}</span>
     </div>
   )
 }
@@ -285,21 +473,35 @@ function Meter({
   value,
   range,
   hint,
+  unit = '',
 }: {
   label: string
   value: number
   range: readonly [number, number]
   hint: string
+  unit?: string
 }) {
   const color = meterColor(value, range)
+  const ok = inRange(value, range)
   return (
-    <div className="meter" title={hint}>
+    <div className={`meter ${ok ? 'meter--ok' : 'meter--warn'}`} title={hint}>
       <label>
         <span>{label}</span>
-        <span style={{ color }}>{Math.round(value)}</span>
+        <span style={{ color }}>
+          {Math.round(value)}
+          {unit}
+        </span>
       </label>
       <div className="meter__track">
         <div className="meter__fill" style={{ width: `${value}%`, background: color }} />
+        <span
+          className="meter__ideal"
+          style={{
+            left: `${range[0]}%`,
+            width: `${range[1] - range[0]}%`,
+          }}
+          aria-hidden="true"
+        />
       </div>
     </div>
   )

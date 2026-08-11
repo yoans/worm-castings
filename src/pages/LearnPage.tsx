@@ -4,14 +4,14 @@ import { CONTACT, COPY } from '@/lib/castings'
 export function LearnPage() {
   return (
     <div className="container page-hero learn-page">
-      <span className="eyebrow">Portable pamphlet · education → call to buy</span>
-      <h1>Start with nitrates. Land on castings.</h1>
+      <span className="eyebrow">Lower nitrogen · living soil · resilient lawns</span>
+      <h1>A soil-first choice for Iowa lawns</h1>
       <p className="learn-lede">{COPY.nitrateHook}</p>
 
       <div className="nitrate-compare" role="group" aria-label="Nitrate load comparison">
         <article className="compare compare--chem">
-          <h2>Chemical fertilizer reflex</h2>
-          <p>Quick green-up. High soluble nitrates. Nutrients that don&apos;t stick can move with water.</p>
+          <h2>High-nitrogen fertilizer</h2>
+          <p>Fast green-up can come with more soluble nitrogen than the lawn and soil can hold.</p>
           <div
             className="bar bar--full"
             role="img"
@@ -22,22 +22,25 @@ export function LearnPage() {
           <p className="compare__verdict">Relative nitrate load: high</p>
         </article>
         <article className="compare compare--cast">
-          <h2>Worm castings choice</h2>
+          <h2>Wildwood worm castings</h2>
           <p>
-            <strong>Low in nitrogen</strong>, absorbs better into the soil, and helps avoid exacerbating
-            nitrate issues in Central Iowa&apos;s drinking water. Microbes + slow release + nutrients that
-            stay in the root zone.
+            <strong>2% total nitrogen</strong>, plus organic matter and living biology that support a slower,
+            soil-first approach to feeding turf.
           </p>
           <div
             className="bar bar--fifth"
             role="img"
-            aria-label="Relative nitrate load: much lower than chemical fertilizer"
+            aria-label="Total nitrogen by weight: 2 percent compared with a product labeled 10 percent"
           >
             <span />
           </div>
-          <p className="compare__verdict">Lower nitrate load · held in the soil</p>
+          <p className="compare__verdict">80% lower total nitrogen by weight*</p>
         </article>
       </div>
+      <p className="proof-note">
+        *Comparison is based on total nitrogen by weight versus a product labeled 10%; application rates
+        differ.
+      </p>
 
       <section className="section" style={{ paddingTop: '2.5rem' }} aria-labelledby="iowa-water-heading">
         <div className="panel panel--readable">
@@ -51,9 +54,9 @@ export function LearnPage() {
             watering is the first cut to protect drinking supply.
           </p>
           <p className="learn-callout">
-            Castings are not a watershed fix. They are a concrete household swap: feed soil biology, hold
-            moisture in the lawn, and stop reaching for the highest nitrate bag by default — especially when
-            your community is living through bans.
+            Castings are not a watershed fix. They are a practical lower-nitrogen lawn choice that supports
+            soil biology and moisture retention — especially when your community is living through watering
+            restrictions.
           </p>
         </div>
       </section>
@@ -115,7 +118,8 @@ export function LearnPage() {
               <li>Slow-release plant nutrients</li>
               <li>Helps soil hold water and stay aerated</li>
               <li>Anchors nutrients that would otherwise leach away</li>
-              <li>Safe for pets and people</li>
+              <li>Safe for kids, pets, and pollinators — no burn, no harsh synthetic salts</li>
+              <li>Supports the mission and programs of Wildwood Hills Ranch</li>
             </ul>
           </article>
           <article className="fact-card">
@@ -123,7 +127,7 @@ export function LearnPage() {
             <ul>
               <li>Lawns: broadcast with a fertilizer spreader</li>
               <li>Top-dress gardens and gently rake in</li>
-              <li>Mix about 20% into potting soil or seed starter</li>
+              <li>Mix about 30% into potting soil or seed starter</li>
               <li>Lawns: 20 lbs per 1,000 sq ft · fall and spring</li>
             </ul>
           </article>
@@ -134,7 +138,7 @@ export function LearnPage() {
         <div className="panel panel--readable" style={{ display: 'grid', gap: '1rem' }}>
           <div>
             <span className="eyebrow">How to buy</span>
-            <h2 id="how-to-buy-heading">No online store yet — call or visit</h2>
+            <h2 id="how-to-buy-heading">Call or text to order</h2>
             <p style={{ marginBottom: '0.35rem' }}>
               <strong>{CONTACT.ranchName}</strong>
               <br />

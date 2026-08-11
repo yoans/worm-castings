@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { asset } from '@/lib/assets'
-import { COPY } from '@/lib/castings'
+import { CONTACT, COPY } from '@/lib/castings'
 
 export function HomePage() {
   return (
@@ -21,9 +21,9 @@ export function HomePage() {
         />
         <div className="hero__content">
           <div className="hero__brand">
-            <img src={asset('brand/whr-logo.png')} alt="" />
+            <img src={asset('brand/wildwood-bag-badge-photo.png')} alt="" />
             <span style={{ fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', fontSize: '0.8rem' }}>
-              Wildwood Hills Ranch of Iowa
+              Wildwood Worm Castings
             </span>
           </div>
           <h1>{COPY.lawnHeadline}</h1>
@@ -32,11 +32,8 @@ export function HomePage() {
             <Link className="btn btn--primary" to="/lawn">
               Size my lawn
             </Link>
-            <Link className="btn btn--secondary" to="/learn">
-              Water bans &amp; nitrates
-            </Link>
-            <a className="btn btn--secondary" href="tel:6413962414">
-              Call 641-396-2414
+            <a className="btn btn--secondary" href={`tel:${CONTACT.phoneTel}`}>
+              Call {CONTACT.phoneDisplay}
             </a>
           </div>
         </div>
@@ -44,46 +41,73 @@ export function HomePage() {
 
       <section className="section container">
         <div className="section__head">
-          <span className="eyebrow">Three ways in</span>
-          <h2>Sell today. Educate Iowa. Grow tomorrow&apos;s customers.</h2>
+          <span className="eyebrow">Explore Wildwood worm castings</span>
+          <h2>Better lawns. Healthier soil. A mission worth supporting.</h2>
           <p>
-            Lawn demand can move inventory this fall. The nitrate story earns trust. The worm farm game
-            programs kids — and their parents — into castings as the natural choice.
+            Calculate what your lawn needs, learn why lower-nitrogen soil care matters, or let kids discover
+            how worms turn scraps into something gardens can use.
           </p>
         </div>
 
         <div className="paths">
           <Link to="/lawn" className="path path--lawn">
             <h3>Lawn health</h3>
-            <p>Fall &amp; spring. 20 lbs / 1,000 sq ft. Instant bag &amp; price estimate.</p>
-            <span>Explosive conversion →</span>
+            <p>Fall &amp; spring. 20 lbs / 1,000 sq ft. Get an instant bag and price estimate.</p>
+            <span>Size your lawn →</span>
           </Link>
           <Link to="/learn" className="path path--learn">
-            <h3>Nitrates &amp; soil</h3>
-            <p>Low nitrogen. Absorbs into soil. Protects worms from synthetic-salt shock.</p>
-            <span>Portable pamphlet →</span>
+            <h3>Water &amp; soil</h3>
+            <p>See how a lower-nitrogen, soil-first approach supports living soil and resilient turf.</p>
+            <span>Why it matters →</span>
           </Link>
           <Link to="/play" className="path path--play">
             <h3>Keep a worm alive</h3>
-            <p>Kids 5–10: moisture, food, eggs, castings. Cute loop. Parental co-play.</p>
-            <span>Customers of tomorrow →</span>
+            <p>A playful lesson for kids ages 5–10: food, moisture, eggs, worms, and castings.</p>
+            <span>Play and learn →</span>
           </Link>
         </div>
       </section>
 
       <section className="section container">
-        <div className="panel">
-          <span className="eyebrow">From the brochure</span>
-          <h2>What are worm castings?</h2>
-          <p>
-            Worm castings are a natural dirt enhancer produced from earthworms. Also known as vermicast —
-            the product of worm digestion. {COPY.safeLine}
-          </p>
-          <p style={{ marginBottom: 0 }}>
-            Naturally full of desirable microorganisms. They produce, store, and slowly release plant
-            nutrients — helping increase water retention, improve aeration, and anchor nutrients that would
-            otherwise leach away with water.
-          </p>
+        <div className="section__head">
+          <span className="eyebrow">Real yard · shared with permission</span>
+          <h2>Before and after castings</h2>
+          <p>Same home — thicker, greener turf after fall and spring applications.</p>
+        </div>
+        <div className="before-after">
+          <figure className="ba-shot">
+            <img src={asset('proof/lawn-before.png')} alt="Lawn before worm castings" />
+            <figcaption>
+              <strong>Before</strong> — thin, stressed turf
+            </figcaption>
+          </figure>
+          <figure className="ba-shot">
+            <img src={asset('proof/lawn-after-real.png')} alt="Lawn after worm castings" />
+            <figcaption>
+              <strong>After</strong> — denser green after castings
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section className="section container">
+        <div className="panel panel--product">
+          <div className="panel__product-mark">
+            <img src={asset('brand/wildwood-bag-badge-photo.png')} alt="Wildwood Worm Castings" />
+          </div>
+          <div>
+            <span className="eyebrow">100% natural · chemical free</span>
+            <h2>What are worm castings?</h2>
+            <p>
+              Worm castings are a natural dirt enhancer produced from earthworms. Also known as vermicast —
+              the product of worm digestion. {COPY.safeLine}
+            </p>
+            <p style={{ marginBottom: 0 }}>
+              Naturally full of desirable microorganisms. They produce, store, and slowly release plant
+              nutrients — helping increase water retention, improve aeration, and anchor nutrients that would
+              otherwise leach away with water.
+            </p>
+          </div>
         </div>
       </section>
     </>
