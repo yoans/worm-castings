@@ -12,6 +12,16 @@ type FxKind = 'feed' | 'browns' | 'mist' | 'fluff' | 'temp' | 'rain' | 'hatch' |
 
 type FxState = { kind: FxKind; id: number }
 
+type WormTrick = 'jump' | 'dance' | 'spin'
+
+const WORM_TRICKS: WormTrick[] = ['jump', 'dance', 'spin']
+
+const TRICK_SAY: Record<WormTrick, string> = {
+  jump: 'Boing! That worm loves to jump.',
+  dance: 'Wiggle party! Your worm is dancing.',
+  spin: 'Whoosh! Twirly worm!',
+}
+
 /** David: keep room temp 65–85°F; humidity/moisture below 65% is the big risk. */
 const IDEAL = {
   temp: [65, 85] as const,
@@ -51,8 +61,11 @@ export function PlayPage() {
   const [paused, setPaused] = useState(false)
   const [toastPop, setToastPop] = useState(0)
   const [scorePop, setScorePop] = useState<Record<string, number>>({})
+  const [wormTricks, setWormTricks] = useState<Record<number, { kind: WormTrick; id: number }>>({})
   const fxTimer = useRef<number | null>(null)
   const fxSeq = useRef(0)
+  const trickSeq = useRef(0)
+  const trickTimers = useRef<Record<number, number>>({})
 
   const healthy = useMemo(() => {
     return (
@@ -79,6 +92,12 @@ export function PlayPage() {
     }, 3200)
     return () => window.clearInterval(id)
   }, [paused])
+
+  useEffect(() => {
+    return () => {
+      Object.values(trickTimers.current).forEach((id) => window.clearTimeout(id))
+    }
+  }, [])
 
   useEffect(() => {
     if (day === 1) return
@@ -172,6 +191,24 @@ export function PlayPage() {
     setMeters((m) => ({ ...m, moisture: clamp(m.moisture + 22), air: clamp(m.air - 10) }))
     bumpFx('rain')
     say('Heavy rain! Worms breathe through their skin — too wet and they crawl up for air.')
+  }
+
+  function tickleWorm(index: number) {
+    const kind = WORM_TRICKS[Math.floor(Math.random() * WORM_TRICKS.length)]
+    trickSeq.current += 1
+    const id = trickSeq.current
+    if (trickTimers.current[index]) window.clearTimeout(trickTimers.current[index])
+    setWormTricks((t) => ({ ...t, [index]: { kind, id } }))
+    say(TRICK_SAY[kind])
+    trickTimers.current[index] = window.setTimeout(() => {
+      setWormTricks((t) => {
+        if (t[index]?.id !== id) return t
+        const next = { ...t }
+        delete next[index]
+        return next
+      })
+      delete trickTimers.current[index]
+    }, 1050)
   }
 
   const wormPositions = useMemo(
@@ -303,27 +340,41 @@ export function PlayPage() {
             )}
           </div>
 
-          {wormPositions.map((pos, i) => (
-            <div
-              key={`w-${i}-${worms}`}
-              className={[
-                'bin__worm',
-                `bin__worm--${pos.size}`,
-                healthy ? 'bin__worm--happy' : 'bin__worm--sad',
-                fx?.kind === 'feed' || fx?.kind === 'browns' ? 'bin__worm--feast' : '',
-                fx?.kind === 'bad' ? 'bin__worm--yuck' : '',
-                fx?.kind === 'rain' ? 'bin__worm--climb' : '',
-              ]
-                .filter(Boolean)
-                .join(' ')}
-              style={{ left: pos.left, top: pos.top, animationDelay: pos.delay }}
-            >
-              <span className="bin__worm-seg" />
-              <span className="bin__worm-seg" />
-              <span className="bin__worm-seg" />
-              <span className="bin__worm-eye" />
-            </div>
-          ))}
+          {wormPositions.map((pos, i) => {
+            const trick = wormTricks[i]
+            return (
+              <div
+                key={`w-${i}-${worms}-${trick?.id ?? 0}`}
+                className={[
+                  'bin__worm',
+                  `bin__worm--${pos.size}`,
+                  healthy ? 'bin__worm--happy' : 'bin__worm--sad',
+                  fx?.kind === 'feed' || fx?.kind === 'browns' ? 'bin__worm--feast' : '',
+                  fx?.kind === 'bad' ? 'bin__worm--yuck' : '',
+                  fx?.kind === 'rain' ? 'bin__worm--climb' : '',
+                  trick ? `bin__worm--trick-${trick.kind}` : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+                style={{ left: pos.left, top: pos.top, animationDelay: trick ? '0s' : pos.delay }}
+                role="button"
+                tabIndex={0}
+                aria-label={`Tickle worm ${i + 1}`}
+                onClick={() => tickleWorm(i)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    tickleWorm(i)
+                  }
+                }}
+              >
+                <span className="bin__worm-seg" />
+                <span className="bin__worm-seg" />
+                <span className="bin__worm-seg" />
+                <span className="bin__worm-eye" />
+              </div>
+            )
+          })}
 
           {eggPositions.map((pos, i) => (
             <div
