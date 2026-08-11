@@ -62,9 +62,13 @@ export function PlayPage() {
   const [toastPop, setToastPop] = useState(0)
   const [scorePop, setScorePop] = useState<Record<string, number>>({})
   const [wormTricks, setWormTricks] = useState<Record<number, { kind: WormTrick; id: number }>>({})
+  const [hatchingEgg, setHatchingEgg] = useState<{ id: number; left: string; top: string } | null>(
+    null,
+  )
   const fxTimer = useRef<number | null>(null)
   const fxSeq = useRef(0)
   const trickSeq = useRef(0)
+  const hatchTimer = useRef<number | null>(null)
   const trickTimers = useRef<Record<number, number>>({})
 
   const healthy = useMemo(() => {
@@ -96,6 +100,7 @@ export function PlayPage() {
   useEffect(() => {
     return () => {
       Object.values(trickTimers.current).forEach((id) => window.clearTimeout(id))
+      if (hatchTimer.current) window.clearTimeout(hatchTimer.current)
     }
   }, [])
 
@@ -112,6 +117,16 @@ export function PlayPage() {
     })
     bumpFx('poop')
     if (hatchReady && day % 4 === 0) {
+      // Snapshot the last egg's spot so the hatch plays on that egg, then remove it from the count
+      const hatchIndex = Math.min(eggs, 6) - 1
+      const hatchId = ++fxSeq.current
+      const left = `${20 + hatchIndex * 12}%`
+      const top = `${62 + (hatchIndex % 2) * 10}%`
+      if (hatchTimer.current) window.clearTimeout(hatchTimer.current)
+      setHatchingEgg({ id: hatchId, left, top })
+      hatchTimer.current = window.setTimeout(() => {
+        setHatchingEgg((cur) => (cur && cur.id === hatchId ? null : cur))
+      }, 1800)
       setEggs((e) => Math.max(0, e - 1))
       setWorms((w) => {
         popScore('worms')
@@ -320,14 +335,6 @@ export function PlayPage() {
                 <span className="fx-splash" />
               </>
             )}
-            {fx?.kind === 'hatch' && (
-              <>
-                <span className="fx-spark" />
-                <span className="fx-spark fx-spark--2" />
-                <span className="fx-spark fx-spark--3" />
-                <span className="fx-baby-worm" />
-              </>
-            )}
             {fx?.kind === 'bad' && (
               <>
                 <span className="fx-x" />
@@ -408,10 +415,25 @@ export function PlayPage() {
           {eggPositions.map((pos, i) => (
             <div
               key={`e-${i}-${eggs}`}
-              className={`bin__egg ${fx?.kind === 'hatch' && i === 0 ? 'bin__egg--hatch' : ''}`}
+              className="bin__egg"
               style={{ left: pos.left, top: pos.top }}
             />
           ))}
+
+          {hatchingEgg && (
+            <div
+              key={`hatch-${hatchingEgg.id}`}
+              className="bin__egg bin__egg--hatch"
+              style={{ left: hatchingEgg.left, top: hatchingEgg.top }}
+              aria-hidden="true"
+            >
+              <span className="bin__egg-crack" />
+              <span className="bin__egg-spark" />
+              <span className="bin__egg-spark bin__egg-spark--2" />
+              <span className="bin__egg-spark bin__egg-spark--3" />
+              <span className="bin__egg-baby" />
+            </div>
+          )}
 
           <div className="bin__scores">
             <ScoreChip label="Day" value={day} popKey={scorePop.day} />

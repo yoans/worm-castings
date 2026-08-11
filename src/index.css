@@ -977,6 +977,85 @@ main {
   z-index: 2;
 }
 
+.bin__egg--hatch {
+  z-index: 5;
+  animation: eggHatch 1.55s ease both !important;
+  overflow: visible;
+}
+
+.bin__egg-crack {
+  position: absolute;
+  inset: 18% 28% 22%;
+  border-left: 2px solid rgba(90, 60, 20, 0.55);
+  border-right: 2px solid rgba(90, 60, 20, 0.35);
+  transform: rotate(-18deg) scaleY(0);
+  transform-origin: top center;
+  animation: eggCrack 1.55s ease both;
+  pointer-events: none;
+}
+
+.bin__egg-crack::before,
+.bin__egg-crack::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 2px;
+  height: 55%;
+  background: rgba(90, 60, 20, 0.45);
+  border-radius: 1px;
+}
+
+.bin__egg-crack::before {
+  top: 10%;
+  transform: translateX(-3px) rotate(28deg);
+}
+
+.bin__egg-crack::after {
+  top: 30%;
+  transform: translateX(2px) rotate(-32deg);
+}
+
+.bin__egg-spark {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  background: #f0b000;
+  clip-path: polygon(50% 0%, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0% 50%, 38% 38%);
+  animation: eggSpark 1.55s ease both;
+  pointer-events: none;
+}
+
+.bin__egg-spark--2 {
+  animation-delay: 0.08s;
+  --spark-x: 14px;
+  --spark-y: -18px;
+}
+
+.bin__egg-spark--3 {
+  animation-delay: 0.14s;
+  --spark-x: -16px;
+  --spark-y: -12px;
+}
+
+.bin__egg-baby {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 28px;
+  height: 10px;
+  margin-left: -6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #f0a070, #e87850);
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  animation: eggBaby 1.55s ease both;
+  pointer-events: none;
+  z-index: 1;
+}
+
 .bin__scores {
   position: absolute;
   left: 0.75rem;
@@ -1078,10 +1157,6 @@ main {
 
 .bin--fx-poop .bin__worm {
   animation: wormCastPush 0.55s ease both;
-}
-
-.bin__egg--hatch {
-  animation: eggHatch 1s ease both;
 }
 
 /* ---- FX particles ---- */
@@ -1293,24 +1368,18 @@ main {
 
 .fx-cast {
   /* Anchored at worm position; anim moves left (rear) then falls */
-  width: 18px;
+  width: 14px;
   height: 14px;
   margin-left: 2px;
-  border-radius: 60% 45% 55% 50%;
-  background:
-    radial-gradient(circle at 28% 30%, #8b6348 0%, transparent 50%),
-    radial-gradient(circle at 72% 60%, #5c3d28 0%, #2a1a12 75%);
-  box-shadow:
-    6px 3px 0 -2px #6b4a34,
-    -4px 4px 0 -3px #7a5640,
-    inset 0 -3px 0 rgba(0, 0, 0, 0.28),
-    0 4px 6px rgba(0, 0, 0, 0.35);
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, #8a6248, #5c3d28 55%, #3a2418 100%);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.28);
   animation: castDrop 2s cubic-bezier(0.33, 0.02, 0.55, 0.95) both;
   transform-origin: 50% 50%;
 }
 
 .fx-cast--small {
-  width: 12px;
+  width: 10px;
   height: 10px;
   margin-left: -2px;
   animation-name: castDropSmall;
@@ -1497,8 +1566,52 @@ main {
 
 @keyframes eggHatch {
   0% { transform: scale(1) rotate(0); opacity: 1; }
-  40% { transform: scale(1.4) rotate(-10deg); }
-  100% { transform: scale(0.3) rotate(16deg); opacity: 0; }
+  18% { transform: scale(1.2) rotate(-8deg); }
+  32% { transform: scale(1.35) rotate(10deg); }
+  48% { transform: scale(1.15) rotate(-6deg); }
+  70% { transform: scale(0.85) rotate(8deg); opacity: 1; }
+  100% { transform: scale(0.35) rotate(14deg); opacity: 0; }
+}
+
+@keyframes eggCrack {
+  0%, 12% { transform: rotate(-18deg) scaleY(0); opacity: 0; }
+  28% { transform: rotate(-18deg) scaleY(1); opacity: 1; }
+  75% { opacity: 1; }
+  100% { transform: rotate(-18deg) scaleY(1.1); opacity: 0; }
+}
+
+@keyframes eggSpark {
+  0%, 20% {
+    transform: translate(0, 0) scale(0.2) rotate(0);
+    opacity: 0;
+  }
+  40% {
+    transform: translate(var(--spark-x, 12px), var(--spark-y, -16px)) scale(1.2) rotate(20deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(var(--spark-x, 12px) * 1.6), calc(var(--spark-y, -16px) * 1.4)) scale(0.4) rotate(50deg);
+    opacity: 0;
+  }
+}
+
+@keyframes eggBaby {
+  0%, 30% {
+    transform: translate(0, 0) scaleX(0.3);
+    opacity: 0;
+  }
+  45% {
+    transform: translate(4px, -2px) scaleX(0.85);
+    opacity: 1;
+  }
+  75% {
+    transform: translate(22px, 4px) scaleX(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(34px, 10px) scaleX(1);
+    opacity: 0;
+  }
 }
 
 @keyframes leafDrop {
@@ -1593,20 +1706,20 @@ main {
     opacity: 1;
   }
   28% {
-    transform: translate(-26px, 22px) scale(1.05, 0.98) rotate(-4deg);
+    transform: translate(-26px, 22px) scale(1.05) rotate(-4deg);
   }
   48% {
-    transform: translate(-20px, 58px) scale(1.08, 0.92) rotate(14deg);
+    transform: translate(-20px, 58px) scale(1.05) rotate(14deg);
   }
   68% {
-    transform: translate(-12px, 105px) scale(1.12, 0.82) rotate(32deg);
+    transform: translate(-12px, 105px) scale(1.05) rotate(32deg);
   }
   86% {
-    transform: translate(-6px, 148px) scale(1.4, 0.48) rotate(8deg);
+    transform: translate(-6px, 148px) scale(1.12) rotate(8deg);
     opacity: 1;
   }
   100% {
-    transform: translate(-6px, 146px) scale(1.2, 0.6) rotate(4deg);
+    transform: translate(-6px, 146px) scale(1) rotate(4deg);
     opacity: 0;
   }
 }
@@ -1624,17 +1737,17 @@ main {
     transform: translate(-30px, 16px) scale(1.05) rotate(10deg);
   }
   40% {
-    transform: translate(-24px, 52px) scale(1.05, 0.9) rotate(22deg);
+    transform: translate(-24px, 52px) scale(1) rotate(22deg);
   }
   65% {
-    transform: translate(-14px, 100px) scale(1.1, 0.8) rotate(40deg);
+    transform: translate(-14px, 100px) scale(1.05) rotate(40deg);
   }
   85% {
-    transform: translate(-8px, 142px) scale(1.35, 0.45) rotate(12deg);
+    transform: translate(-8px, 142px) scale(1.1) rotate(12deg);
     opacity: 1;
   }
   100% {
-    transform: translate(-8px, 140px) scale(1.15, 0.55) rotate(6deg);
+    transform: translate(-8px, 140px) scale(1) rotate(6deg);
     opacity: 0;
   }
 }
