@@ -128,7 +128,7 @@ export function PlayPage() {
     if (fxTimer.current) window.clearTimeout(fxTimer.current)
     fxTimer.current = window.setTimeout(() => {
       setFx((cur) => (cur && cur.id === id ? null : cur))
-    }, 1200)
+    }, 1800)
   }
 
   function feed(kind: 'greens' | 'citrus' | 'protein' | 'browns') {
@@ -204,15 +204,15 @@ export function PlayPage() {
     .join(' ')
 
   return (
-    <div className="container page-hero">
+    <div className="container page-hero play-page">
       <span className="eyebrow">Ages 5–10 · parental guidance</span>
       <h1>Keep your worm farm alive</h1>
-      <p>
+      <p className="play-lede">
         Keep temp between 65–85°F and moisture at 65%+. Right food, enough air, watch eggs hatch, and collect
         castings — the living fertilizer that helps lawns and gardens.
       </p>
 
-      <div className="game-shell" style={{ marginTop: '1.5rem' }}>
+      <div className="game-shell">
         <div className={binClass} aria-label="Worm bin">
           <div className="bin__sky" aria-hidden="true" />
           <div className="bin__soil">
@@ -377,17 +377,17 @@ export function PlayPage() {
 
           <div className="controls">
             <button className="btn btn--forest" type="button" onClick={() => feed('greens')}>
-              Feed greens
+              🥬 Feed greens
             </button>
             <button className="btn btn--ghost" type="button" onClick={() => feed('browns')}>
-              Add browns
+              🍂 Add browns
             </button>
             <button
               className="btn btn--ghost"
               type="button"
               onClick={() => adjust('moisture', 12, 'You misted the bin. Moisture up!', 'mist')}
             >
-              Mist water
+              💧 Mist water
             </button>
             <button
               className="btn btn--ghost"
@@ -396,7 +396,7 @@ export function PlayPage() {
                 adjust('air', 14, 'Fluffed bedding — more air for skin-breathing worms.', 'fluff')
               }
             >
-              Fluff air
+              💨 Fluff air
             </button>
             <button
               className="btn btn--ghost"
@@ -410,20 +410,20 @@ export function PlayPage() {
                 )
               }
             >
-              Fix temp
+              🌡 Fix temp
             </button>
             <button className="btn btn--ghost" type="button" onClick={rainEvent}>
-              Rain storm
+              🌧 Rain storm
             </button>
             <button className="btn btn--ghost btn--danger-ghost" type="button" onClick={() => feed('citrus')}>
-              Try citrus?
+              🍋 Try citrus?
             </button>
             <button
               className="btn btn--ghost btn--danger-ghost"
               type="button"
               onClick={() => feed('protein')}
             >
-              Try protein?
+              🍗 Try protein?
             </button>
           </div>
 
@@ -432,7 +432,7 @@ export function PlayPage() {
             {lastFood === 'bad' ? ' Ask a grown-up why that food is unsafe.' : null}
           </div>
 
-          <div className="cta-row" style={{ marginTop: '1rem' }}>
+          <div className="cta-row play-grownup-cta">
             <Link className="btn btn--primary" to="/lawn">
               Grown-ups: size your lawn
             </Link>
