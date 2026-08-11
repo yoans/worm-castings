@@ -194,6 +194,7 @@ export function PlayPage() {
   }
 
   function tickleWorm(index: number) {
+    if (paused) return
     const kind = WORM_TRICKS[Math.floor(Math.random() * WORM_TRICKS.length)]
     trickSeq.current += 1
     const id = trickSeq.current
@@ -234,6 +235,7 @@ export function PlayPage() {
   const binClass = [
     'bin',
     healthy ? 'bin--healthy' : 'bin--stressed',
+    paused ? 'bin--paused' : '',
     fx ? `bin--fx-${fx.kind}` : '',
     fx?.kind === 'feed' || fx?.kind === 'browns' ? 'bin--worms-feast' : '',
   ]
@@ -401,7 +403,9 @@ export function PlayPage() {
             >
               {paused ? 'Resume' : 'Pause'}
             </button>
-            <span className="game-toolbar__hint">{paused ? 'Day clock paused' : 'Day clock running'}</span>
+            <span className="game-toolbar__hint">
+              {paused ? 'Paused — clock & animations frozen' : 'Day clock running'}
+            </span>
           </div>
 
           <div className="meters">

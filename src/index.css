@@ -855,6 +855,11 @@ main {
   box-shadow: var(--shadow), 0 0 0 3px rgba(214, 69, 69, 0.28);
 }
 
+.bin--paused,
+.bin--paused * {
+  animation-play-state: paused !important;
+}
+
 .bin__sky {
   position: absolute;
   inset: 0 0 55%;
