@@ -20,8 +20,8 @@ export function LawnPage() {
       <span className="eyebrow">A healthier way to greener lawns</span>
       <h1>{COPY.lawnHeadline}</h1>
       <p>
-        Size your yard, see bags and price, then call or text to order. Apply with a fertilizer spreader —
-        fall and spring for best results.
+        Size your yard, see bags and price, then call or text to order. Spread by hand or with a top
+        dresser — fall and spring for best results.
       </p>
 
       <div className="calc" style={{ marginTop: '1.75rem' }}>
@@ -81,8 +81,8 @@ export function LawnPage() {
             <small>{result.note}</small>
           </div>
           <p style={{ margin: 0, position: 'relative', zIndex: 1 }}>
-            Each season: <strong>{perSeasonLbs.toLocaleString()} lbs</strong> ({perSeasonBags} bags). Apply
-            with a fertilizer spreader.
+            Each season: <strong>{perSeasonLbs.toLocaleString()} lbs</strong> ({perSeasonBags} bags). Spread
+            by hand or with a rented top dresser.
           </p>
           <div className="cta-row" style={{ marginTop: 0, position: 'relative', zIndex: 1 }}>
             <a className="btn btn--primary" href="#buy">
@@ -193,7 +193,34 @@ export function LawnPage() {
         <div className="section__head">
           <span className="eyebrow">Application methods</span>
           <h2>For the best results</h2>
-          <p>Use a fertilizer spreader for lawns — not a compost spreader.</p>
+          <p>
+            Castings stay moist, so they clog a typical fertilizer spreader. A mesh compost barrel does not
+            control flow well either. Spread by hand, rent a top dresser, or hire it applied.
+          </p>
+        </div>
+
+        <div className="spread-grid" role="list">
+          <article className="fact-card" role="listitem">
+            <h3>By hand</h3>
+            <p>
+              Toss handfuls evenly across the lawn, then rake for coverage. Works well for smaller yards or
+              when you have extra hands.
+            </p>
+          </article>
+          <article className="fact-card" role="listitem">
+            <h3>Top dresser</h3>
+            <p>
+              The machine that handles moist material. Find a rental and ask for a{' '}
+              <strong>top dresser</strong> — not a fertilizer spreader or mesh compost barrel.
+            </p>
+          </article>
+          <article className="fact-card" role="listitem">
+            <h3>Hire it applied</h3>
+            <p>
+              <strong>5 Sons Landscaping of Winterset</strong> applies Wildwood castings. Ask when you order
+              if you want application included.
+            </p>
+          </article>
         </div>
 
         <div className="panel methods">
@@ -203,8 +230,8 @@ export function LawnPage() {
               <h3>Dry top-dressing</h3>
               <p style={{ marginBottom: '0.35rem' }}>
                 <strong>Best for overall soil health.</strong> Apply about 15–20 pounds per 1,000 sq ft.
-                Broadcast evenly by hand or with a <strong>fertilizer spreader</strong>. For best
-                distribution, apply just before mowing and use a mulching attachment.
+                Spread evenly by hand or with a <strong>top dresser</strong>. For best distribution, apply
+                just before mowing and use a mulching attachment.
               </p>
               <p style={{ margin: 0, color: 'var(--muted)' }}>
                 Timing: spring and fall — help roots recover and prep soil for temperature changes.
@@ -216,8 +243,8 @@ export function LawnPage() {
             <div>
               <h3>Post-aeration application</h3>
               <p style={{ margin: 0 }}>
-                <strong>Best for compacted soil.</strong> Core-aerate the lawn, then spread castings with a
-                fertilizer spreader. Watering or rain washes nutrient-rich castings down into the aeration
+                <strong>Best for compacted soil.</strong> Core-aerate the lawn, then spread castings by hand
+                or with a top dresser. Watering or rain washes nutrient-rich castings down into the aeration
                 holes.
               </p>
             </div>
@@ -233,6 +260,10 @@ export function LawnPage() {
             </div>
           </article>
         </div>
+        <p className="proof-note" style={{ marginTop: '1rem' }}>
+          Tip: take delivery Friday or Saturday when you can apply soon — castings work best before they dry
+          out.
+        </p>
       </section>
     </div>
   )

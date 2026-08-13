@@ -551,6 +551,20 @@ main {
   font-size: 0.92rem;
 }
 
+.spread-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 0 0 1.5rem;
+}
+
+.spread-grid .fact-card p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+
 .methods {
   display: grid;
   gap: 1rem;
@@ -2335,7 +2349,8 @@ textarea:focus-visible {
   .testimonials,
   .buy-grid,
   .footer-grid,
-  .fact-grid {
+  .fact-grid,
+  .spread-grid {
     grid-template-columns: 1fr;
   }
 

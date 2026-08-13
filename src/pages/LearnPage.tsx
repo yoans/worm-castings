@@ -125,10 +125,11 @@ export function LearnPage() {
           <article className="fact-card">
             <h3>How to use</h3>
             <ul>
-              <li>Lawns: broadcast with a fertilizer spreader</li>
+              <li>Lawns: by hand (toss and rake) or a top dresser — not a fertilizer spreader</li>
               <li>Top-dress gardens and gently rake in</li>
               <li>Mix about 30% into potting soil or seed starter</li>
               <li>Lawns: 20 lbs per 1,000 sq ft · fall and spring</li>
+              <li>Find a top dresser rental, or hire 5 Sons of Winterset to apply</li>
             </ul>
           </article>
         </div>
