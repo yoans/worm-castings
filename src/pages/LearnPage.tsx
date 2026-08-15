@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { CONTACT, COPY } from '@/lib/castings'
+import { CONTACT, COPY, RATES } from '@/lib/castings'
 
 export function LearnPage() {
   return (
@@ -127,7 +127,7 @@ export function LearnPage() {
             <ul>
               <li>Lawns: by hand (toss and rake) or a top dresser — not a fertilizer spreader</li>
               <li>Top-dress gardens and gently rake in</li>
-              <li>Mix about 30% into potting soil or seed starter</li>
+              <li>Mix about {RATES.pottingMixPercent}% into potting soil or seed starter</li>
               <li>Lawns: 20 lbs per 1,000 sq ft · fall and spring</li>
               <li>Find a top dresser rental, or hire 5 Sons of Winterset to apply</li>
             </ul>

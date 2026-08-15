@@ -32,7 +32,7 @@ export const RATES = {
   smallBagPrice: 10,
   bulkLbs: 1000,
   bulkPrice: 750,
-  pottingMixPercent: 30,
+  pottingMixPercent: 20,
 } as const
 
 export function lbsNeeded(sqFt: number) {
