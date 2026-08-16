@@ -254,8 +254,8 @@ export function LawnPage() {
             <div>
               <h3>Gardens, pots &amp; beds</h3>
               <p style={{ margin: 0 }}>
-                Top-dress and gently rake in, or mix about <strong>{RATES.pottingMixPercent}%</strong> castings
-                into potting soil / seed starter. Natural and odor-free; follow label directions.
+                Top-dress and gently rake in, or mix <strong>{RATES.pottingMixPercent}%</strong> castings into
+                potting soil / seed starter. Natural and odor-free; follow label directions.
               </p>
             </div>
           </article>
